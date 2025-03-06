@@ -1,137 +1,112 @@
+import React from 'react'
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Github, Linkedin, Twitter, ArrowRight } from "lucide-react"
+import { Linkedin, ArrowRight } from 'lucide-react'
+
+// Google Form URL for mentor applications
+const MENTOR_APPLICATION_FORM = "https://forms.google.com/your-form-url-here";
 
 const mentors = [
   {
-    name: "Sarah Johnson",
-    role: "Senior Frontend Developer",
-    skills: ["React", "Next.js", "TypeScript"],
-    twitter: "#",
-    github: "#",
-    linkedin: "#",
+    name: "Zeeshan Adil",
+    role: "Lead Engineer | Expert Vetted Upworker",
+    skills: ["K8s", "AWS", ".NET"],
+    linkedin: "https://www.linkedin.com/in/zeeshanadilbutt/",
+    image: "/m2.png",
   },
   {
-    name: "Michael Chen",
-    role: "DevOps Engineer",
+    name: "Fiaz Ahmad",
+    role: "TOP RATED PLUS (Top 3%) @ Upwork ",
     skills: ["CI/CD", "Docker", "Kubernetes"],
-    twitter: "#",
-    github: "#",
-    linkedin: "#",
+    linkedin: "https://www.linkedin.com/in/fiazahmad/",
+    image: "/m5.jpeg",
   },
   {
-    name: "Dr. Priya Patel",
-    role: "AI Researcher",
-    skills: ["Machine Learning", "NLP", "Python"],
-    twitter: "#",
-    github: "#",
-    linkedin: "#",
+    name: "Moeez Ahmad",
+    role: "SWE @ Calo",
+    skills: ["Full Stack", "DevOps", "Serverless"],
+    linkedin: "https://www.linkedin.com/in/moeezahmad01/",
+    image: "/m3.png",
   },
   {
-    name: "James Wilson",
-    role: "Cloud Architect",
+    name: "Tanzeel Saleem",
+    role: "Founder @ DevNexus",
     skills: ["AWS", "Azure", "Serverless"],
-    twitter: "#",
-    github: "#",
-    linkedin: "#",
-  },
-  {
-    name: "Lisa Rodriguez",
-    role: "DevOps Specialist",
-    skills: ["Kubernetes", "GitOps", "Terraform"],
-    twitter: "#",
-    github: "#",
-    linkedin: "#",
-  },
-  {
-    name: "David Kim",
-    role: "Full Stack Developer",
-    skills: ["JavaScript", "Node.js", "React"],
-    twitter: "#",
-    github: "#",
-    linkedin: "#",
-  },
+    linkedin: "https://www.linkedin.com/in/tanzeel-saleem/",
+    image: "/m1.jpg",
+  } 
 ]
 
-export default function MentorsPage() {
+const Page = () => {
   return (
-    <div className="container py-10">
-      <div className="flex flex-col space-y-4 mb-10 text-center">
+    <div>
+      <div className="flex flex-col space-y-4  mt-10 mb-10 text-center">
         <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">Our Expert Mentors</h1>
         <p className="text-muted-foreground text-lg max-w-[800px] mx-auto">
           Learn from industry professionals passionate about sharing their knowledge and helping you grow.
         </p>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mentors.map((mentor, index) => (
-          <Card key={index} className="overflow-hidden group hover:shadow-lg transition-all duration-300">
-            <CardHeader className="p-0">
-              <div className="aspect-[4/3] relative overflow-hidden">
-                <Image
-                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-mqSImhcpQVcNR5qvCyOav9qYXJf6pl.png"
-                  alt={mentor.name}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </div>
-            </CardHeader>
-            <CardContent className="p-4">
-              <CardTitle className="text-xl mb-1 group-hover:text-primary transition-colors duration-300">
-                {mentor.name}
-              </CardTitle>
-              <p className="text-sm text-muted-foreground mb-2">{mentor.role}</p>
-              <div className="flex flex-wrap gap-2">
-                {mentor.skills.map((skill, skillIndex) => (
-                  <Badge key={skillIndex} variant="secondary" className="text-xs">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
-            </CardContent>
-            <CardFooter className="p-4 pt-0 flex justify-between items-center">
-              <div className="flex space-x-2">
-                <Link
-                  href={mentor.twitter}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                >
-                  <Twitter className="h-4 w-4" />
-                </Link>
-                <Link
-                  href={mentor.github}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
-                >
-                  <Github className="h-4 w-4" />
-                </Link>
+      <div className="container py-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 max-w-6xl mx-auto px-4">
+          {mentors.map((mentor, index) => (
+            <Card
+              key={index}
+              className="overflow-hidden border border-border/50 bg-card shadow-sm hover:shadow transition-all duration-300"
+            >
+              <CardHeader className="p-0">
+                <div className="aspect-[4.5/4] relative overflow-hidden">
+                  <Image
+                    src={mentor.image || "/placeholder.svg?height=400&width=400"}
+                    alt={mentor.name}
+                    fill
+                    className="object-cover object-top"
+                  />
+                </div>
+              </CardHeader>
+              <CardContent className="p-4 space-y-2">
+                <div>
+                  <CardTitle className="text-sm font-semibold">{mentor.name}</CardTitle>
+                  <p className="text-xs text-muted-foreground leading-tight">{mentor.role}</p>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {mentor.skills.map((skill, skillIndex) => (
+                    <Badge
+                      key={skillIndex}
+                      variant="secondary"
+                      className="text-[10px] px-1.5 py-0.5 font-normal bg-secondary/50"
+                    >
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
                 <Link
                   href={mentor.linkedin}
-                  className="text-muted-foreground hover:text-primary transition-colors duration-200"
+                  className="inline-flex items-center justify-center rounded text-xs font-medium h-8 px-3 w-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
                 >
-                  <Linkedin className="h-4 w-4" />
+                  <Linkedin className="h-4 w-4 mr-2" /> Connect on LinkedIn
                 </Link>
-              </div>
-              <Button variant="ghost" size="sm" className="group-hover:text-primary transition-colors duration-300">
-                View Profile <ArrowRight className="ml-1 h-3 w-3" />
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
-      <div className="mt-16 text-center">
-        <h2 className="text-3xl font-bold mb-4">Want to Become a Mentor?</h2>
-        <p className="text-muted-foreground text-lg mb-6 max-w-[600px] mx-auto">
-          Share your expertise and help shape the next generation of tech professionals.
-        </p>
-        <Button size="lg" className="rounded-full">
-          Apply to be a Mentor <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+        <div className="mt-16 text-center">
+          <h2 className="text-3xl font-bold mb-4">Want to Become a Mentor?</h2>
+          <p className="text-muted-foreground text-lg mb-6 max-w-[600px] mx-auto">
+            Share your expertise and help shape the next generation of tech professionals.
+          </p>
+          <Link href={MENTOR_APPLICATION_FORM} target="_blank" rel="noopener noreferrer">
+            <Button size="lg" className="rounded-full">
+              Apply to be a Mentor <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </div>
       </div>
     </div>
   )
 }
 
+export default Page
