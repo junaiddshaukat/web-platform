@@ -78,6 +78,9 @@ export default function Home() {
         </div>
       </section>
 
+
+      <GoogleCalendar/>
+      
       {/* Featured Sessions */}
       <section className="w-full py-12 md:py-24 lg:py-32 bg-background">
         <div className="container">
@@ -388,7 +391,6 @@ export default function Home() {
         </div>
       </section>
 
-      <GoogleCalendar/>
 
 
       {/* Join Community Section */}
