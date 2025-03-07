@@ -20,7 +20,7 @@ export default function AboutPage() {
         <div>
           <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
           <p className="text-muted-foreground mb-4">
-            At Dev Weekends, we empower students and professionals through mentorship, competitive preparation, and
+            At Dev Weekends, we empower students,developers and professionals through mentorship, competitive preparation, and
             real-world engagement. We connect students with experienced engineers for career guidance, help them excel
             in ICPC and Meta HackerCup, and encourage contributions to open source programs like GSoC.
           </p>
@@ -35,7 +35,7 @@ export default function AboutPage() {
           </p>
         </div>
         <div className="relative h-[400px] rounded-xl overflow-hidden">
-          <Image src="/about.jpg" alt="Dev Weekends Community" fill className="object-cover" />
+          <Image src="https://res.cloudinary.com/junaidshaukat/image/upload/v1741340636/DW/jujndt7rz9nmyygwv098.jpg" alt="Dev Weekends Meetup" fill className="object-cover" />
         </div>
       </section>
 
