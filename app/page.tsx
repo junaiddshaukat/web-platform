@@ -42,7 +42,7 @@ export default function Home() {
             <Badge className="px-3 py-1 text-sm">Tech Community</Badge>
             <div className="space-y-4 max-w-[800px]">
               <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
-                Your Gateway to Tech Events and Bootcamps
+                Your Gateway to becoming a better Software Engineer.
               </h1>
               <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
                 Join a thriving community of students and tech enthusiasts learning, building, and growing together
