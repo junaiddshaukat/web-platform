@@ -120,33 +120,6 @@ export default function SessionsPage() {
               </CardFooter>
             </Card>
 
-            {/* DW Ramdan Upwork Series */}
-            <Card>
-              <CardHeader>
-                <Badge className="w-fit mb-2">Freelancing</Badge>
-                <CardTitle>DW Ramdan Upwork Series</CardTitle>
-                <CardDescription>Master Upwork to build your successfull freelancing career </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Every Sunday</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4" />
-                  <span>9:30 PM PKT</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>Fiaz Ahmad, Top Rated Upworker</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  View Calender on Home Page to Join
-                </Button>
-              </CardFooter>
-            </Card>
 
             {/* DW Remote Jobs Series */}
             <Card>
