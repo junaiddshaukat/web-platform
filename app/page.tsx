@@ -192,42 +192,7 @@ export default function Home() {
               </CardFooter>
             </Card>
 
-            {/* Session Card 3 */}
-            <Card className="group hover:shadow-lg transition-all duration-300 bg-background border-border">
-              <CardHeader className="pb-3">
-                <Badge className="w-fit mb-2 bg-primary/10 text-primary border-primary/20 group-hover:bg-primary/20">
-                  Freelance
-                </Badge>
-                <CardTitle className="text-xl group-hover:text-primary transition-colors duration-300">
-                  DW Ramdan Upwork Series
-                </CardTitle>
-                <CardDescription>
-                  Complete freelancing guide from Top Rated Freelancers
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="pb-3">
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Every Sunday</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4" />
-                  <span>09:30 PM PKT</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>Fiaz Ahmad, Top Rated Upworker</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  variant="outline"
-                  className="w-full rounded-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300"
-                >
-                  Check the Calender Above to Join
-                </Button>
-              </CardFooter>
-            </Card>
+           
           </div>
 
           <div className="flex justify-center mt-12">
