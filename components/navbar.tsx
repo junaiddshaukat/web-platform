@@ -18,6 +18,7 @@ export default function Navbar() {
     // { href: "/community", label: "Community" },
     // { href: "/resources", label: "Resources" },
     { href: "/about", label: "About" },
+    { href: "/ambassadors", label: "Ambassadors" },
   ];
 
   const isActive = (path: string) => pathname === path;

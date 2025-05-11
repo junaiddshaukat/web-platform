@@ -1,3 +1,6 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -6,7 +9,75 @@ import { Calendar, Clock, Users, Filter } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
+function getCategoryValue(sessionCategory: string) {
+  switch (sessionCategory.toLowerCase()) {
+    case 'web': return 'web';
+    case 'devops': return 'devops';
+    case 'cloud': return 'cloud';
+    case 'ai/ml':
+    case 'ai':
+    case 'ml': return 'ai';
+    case 'cp & dsa': return 'cp';
+    case 'remote job': return 'remote';
+    case 'open source': return 'opensource';
+    case 'other': return 'other';
+    default: return sessionCategory.toLowerCase();
+  }
+}
+
 export default function SessionsPage() {
+  const [sessions, setSessions] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
+  const [selectedTopic, setSelectedTopic] = useState('all');
+
+  useEffect(() => {
+    fetch('/api/sessions')
+      .then(res => res.json())
+      .then(data => setSessions(Array.isArray(data) ? data : []))
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Get unique categories from session data
+  const uniqueCategories = Array.from(
+    new Set(sessions.map(s => getCategoryValue(s.category)))
+  ).filter(Boolean);
+
+  // Build dropdown options
+  const topicOptions = [
+    { value: 'all', label: 'All Topics' },
+    ...uniqueCategories.map(cat => ({
+      value: cat,
+      label:
+        cat === 'web' ? 'Web Development' :
+        cat === 'devops' ? 'DevOps' :
+        cat === 'cloud' ? 'Cloud Computing' :
+        cat === 'ai' ? 'Machine Learning/AI' :
+        cat === 'cp' ? 'CP & DSA' :
+        cat === 'remote' ? 'Remote Job' :
+        cat === 'opensource' ? 'Open Source' :
+        cat.charAt(0).toUpperCase() + cat.slice(1)
+    }))
+  ];
+
+  // Tabs to show (first 5, always include 'all')
+  const tabCategories = ['all', ...uniqueCategories.slice(0, 4)];
+
+  const filteredSessions = (cat: string) => {
+    let filtered = sessions;
+    if (cat !== 'all') {
+      filtered = sessions.filter(s => getCategoryValue(s.category) === cat);
+    }
+    if (search.trim()) {
+      filtered = filtered.filter(s =>
+        s.name.toLowerCase().includes(search.toLowerCase()) ||
+        s.description.toLowerCase().includes(search.toLowerCase()) ||
+        s.speaker.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    return filtered;
+  };
+
   return (
     <div className="container py-10">
       <div className="flex flex-col space-y-4 mb-10">
@@ -20,19 +91,17 @@ export default function SessionsPage() {
       {/* Search and Filter */}
       <div className="flex flex-col md:flex-row gap-4 mb-8">
         <div className="flex-1">
-          <Input placeholder="Search sessions..." />
+          <Input placeholder="Search sessions..." value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <div className="flex gap-2">
-          <Select defaultValue="all">
+          <Select value={selectedTopic} onValueChange={setSelectedTopic}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Topic" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Topics</SelectItem>
-              <SelectItem value="web">Web Development</SelectItem>
-              <SelectItem value="devops">DevOps</SelectItem>
-              <SelectItem value="cloud">Cloud Computing</SelectItem>
-              <SelectItem value="ai">Machine Learning/AI</SelectItem>
+              {topicOptions.map(opt => (
+                <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
           <Select defaultValue="upcoming">
@@ -53,179 +122,60 @@ export default function SessionsPage() {
       </div>
 
       {/* Sessions Tabs */}
-      <Tabs defaultValue="all" className="w-full">
+      <Tabs value={selectedTopic} onValueChange={setSelectedTopic} className="w-full">
         <TabsList className="mb-6">
-          <TabsTrigger value="all">All Sessions</TabsTrigger>
-          <TabsTrigger value="web">Web Dev</TabsTrigger>
-          <TabsTrigger value="devops">DevOps</TabsTrigger>
-          <TabsTrigger value="cloud">Cloud</TabsTrigger>
-          <TabsTrigger value="ai">AI/ML</TabsTrigger>
+          {tabCategories.map(cat => (
+            <TabsTrigger key={cat} value={cat}>
+              {cat === 'all'
+                ? 'All Sessions'
+                : topicOptions.find(opt => opt.value === cat)?.label || cat.charAt(0).toUpperCase() + cat.slice(1)}
+            </TabsTrigger>
+          ))}
         </TabsList>
-
-        <TabsContent value="all" className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* GSoC Sunday Meetup */}
-            <Card>
-              <CardHeader>
-                <Badge className="w-fit mb-2">Open Source</Badge>
-                <CardTitle>GSoC Sunday Meetup</CardTitle>
-                <CardDescription>Weekly Google Summer of Code mentorship and guidance</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Every Saturday</span>
+        {tabCategories.map(cat => (
+          <TabsContent key={cat} value={cat} className="space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {loading ? (
+                Array.from({ length: 3 }).map((_, i) => (
+                  <Card key={i} className="animate-pulse h-64" />
+                ))
+              ) : filteredSessions(cat).length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 text-center col-span-full">
+                  <p className="text-muted-foreground">No current session</p>
                 </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4" />
-                  <span>3:30 PM PKT</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>Aqib Nawab and Muhammad Saqlain</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  View Calender on Home Page to Join
-                </Button>
-              </CardFooter>
-            </Card>
-
-            {/* Dev Weekends DevOps Bootcamp */}
-            <Card>
-              <CardHeader>
-                <Badge className="w-fit mb-2">DevOps</Badge>
-                <CardTitle>Dev Weekends DevOps Bootcamp</CardTitle>
-                <CardDescription>Learn the DevOps from basic concepts to Advance concepts</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Every Saturday</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4" />
-                  <span>9:00 PM PKT</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>Sheryar Ahmad, Software Engineer</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  View Calender on Home Page to Join
-                </Button>
-              </CardFooter>
-            </Card>
-
-
-            {/* DW Remote Jobs Series */}
-            <Card>
-              <CardHeader>
-                <Badge className="w-fit mb-2">Career</Badge>
-                <CardTitle>DW Remote Jobs Series</CardTitle>
-                <CardDescription>Find and secure remote job opportunities</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Every Sunday</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4" />
-                  <span>3:00 PM PKT</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>Muhammad Shehroz, Software Engineer</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  View Calender on Home Page to Join
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="web" className="space-y-8">
-          {/* Web Development Sessions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <Badge className="w-fit mb-2">Open Source</Badge>
-                <CardTitle>GSoC Sunday Meetup</CardTitle>
-                <CardDescription>Weekly Google Summer of Code mentorship and guidance</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Every Saturday</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4" />
-                  <span>3:30 PM PKT</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>Aqib Nawab and Muhammad Saqlain</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  View Calender on Home Page to Join
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="devops" className="space-y-8">
-          {/* DevOps Sessions */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader>
-                <Badge className="w-fit mb-2">DevOps</Badge>
-                <CardTitle>Dev Weekends DevOps Bootcamp</CardTitle>
-                <CardDescription>Learn DevOps from the basic to advance concepts</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>Every Saturday</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
-                  <Clock className="h-4 w-4" />
-                  <span>9:00 PM PKT</span>
-                </div>
-                <div className="flex items-center space-x-2 text-sm">
-                  <Users className="h-4 w-4" />
-                  <span>Sheryar Ahmad, Software Engineer</span>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button variant="outline" className="w-full">
-                  View Calender on Home Page to Join
-                </Button>
-              </CardFooter>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="cloud" className="space-y-8">
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-muted-foreground">No current session</p>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="ai" className="space-y-8">
-          <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-muted-foreground">No current session</p>
-          </div>
-        </TabsContent>
+              ) : (
+                filteredSessions(cat).map((session, idx) => (
+                  <Card key={session._id || idx}>
+                    <CardHeader>
+                      <Badge className="w-fit mb-2">{session.category}</Badge>
+                      <CardTitle>{session.name}</CardTitle>
+                      <CardDescription>{session.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-2">
+                        <Calendar className="h-4 w-4" />
+                        <span>{session.date}</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-4">
+                        <Clock className="h-4 w-4" />
+                        <span>{session.time}</span>
+                      </div>
+                      <div className="flex items-center space-x-2 text-sm">
+                        <Users className="h-4 w-4" />
+                        <span>{session.speaker}</span>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <Button variant="outline" className="w-full">
+                        View Calender on Home Page to Join
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))
+              )}
+            </div>
+          </TabsContent>
+        ))}
       </Tabs>
     </div>
   )

@@ -1,11 +1,32 @@
+'use client'
+
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Lightbulb, Handshake, Globe, GraduationCap, Share2 } from "lucide-react"
 import Link from "next/link"
+import { useEffect, useState } from "react"
+
+interface CoreTeamMember {
+  _id: string;
+  name: string;
+  image: string;
+  role: string;
+  linkedin: string;
+}
 
 export default function AboutPage() {
+  const [coreTeam, setCoreTeam] = useState<CoreTeamMember[]>([]);
+  const [loadingCore, setLoadingCore] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/core-team')
+      .then(res => res.json())
+      .then(data => setCoreTeam(Array.isArray(data) ? data : []))
+      .finally(() => setLoadingCore(false));
+  }, []);
+
   return (
     <div className="container py-10">
       <div className="flex flex-col space-y-4 mb-10">
@@ -224,127 +245,41 @@ export default function AboutPage() {
       <section className="mb-16">
         <h2 className="text-3xl font-bold mb-8 text-center">Meet Our Team</h2>
 
-        <Tabs defaultValue="leadership" className="w-full">
-          <TabsList className="mb-6 justify-center">
-            <TabsTrigger value="leadership">Leadership</TabsTrigger>
-            <TabsTrigger value="mentors">Core Mentors</TabsTrigger>
-            <TabsTrigger value="community">Community Team</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="leadership" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Team Member 1 */}
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="relative w-40 h-40 rounded-full overflow-hidden">
-                  <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-mqSImhcpQVcNR5qvCyOav9qYXJf6pl.png"
-                    alt="Alex Thompson"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">Alex Thompson</h3>
-                  <p className="text-muted-foreground">Founder & CEO</p>
-                </div>
-                <p className="text-muted-foreground">
-                  Former tech lead at a major tech company who founded Dev Weekends to help others navigate their tech
-                  careers.
-                </p>
-              </div>
-
-              {/* Team Member 2 */}
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="relative w-40 h-40 rounded-full overflow-hidden">
-                  <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-mqSImhcpQVcNR5qvCyOav9qYXJf6pl.png"
-                    alt="Maya Rodriguez"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">Maya Rodriguez</h3>
-                  <p className="text-muted-foreground">COO</p>
-                </div>
-                <p className="text-muted-foreground">
-                  Operations expert with a passion for creating efficient systems and processes that help communities
-                  thrive.
-                </p>
-              </div>
-
-              {/* Team Member 3 */}
-              <div className="flex flex-col items-center text-center space-y-4">
-                <div className="relative w-40 h-40 rounded-full overflow-hidden">
-                  <Image
-                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-mqSImhcpQVcNR5qvCyOav9qYXJf6pl.png"
-                    alt="Jason Lee"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold">Jason Lee</h3>
-                  <p className="text-muted-foreground">CTO</p>
-                </div>
-                <p className="text-muted-foreground">
-                  Experienced engineering leader who oversees the technical direction and platform development for Dev
-                  Weekends.
-                </p>
-              </div>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="mentors" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {/* Core Mentors would be listed here */}
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="flex flex-col items-center text-center space-y-2">
-                  <div className="relative w-24 h-24 rounded-full overflow-hidden">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-mqSImhcpQVcNR5qvCyOav9qYXJf6pl.png"
-                      alt={`Core Mentor ${i + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+              {loadingCore ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="flex flex-col items-center text-center space-y-2 animate-pulse">
+                    <div className="relative w-24 h-24 rounded-full overflow-hidden bg-muted" />
+                    <div className="h-4 w-24 bg-muted rounded mb-1" />
+                    <div className="h-3 w-16 bg-muted rounded" />
                   </div>
-                  <div>
-                    <h3 className="font-medium">Core Mentor {i + 1}</h3>
-                    <p className="text-sm text-muted-foreground">Specialty Area</p>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                coreTeam.map((member) => (
+                  <a
+                    key={member._id}
+                    href={member.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center text-center space-y-2 group hover:bg-accent rounded-xl p-2 transition-colors"
+                  >
+                    <div className="relative w-24 h-24 rounded-full overflow-hidden">
+                      <Image
+                        src={member.image || '/placeholder-avatar.jpg'}
+                        alt={member.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform"
+                      />
+                    </div>
+                    <div>
+                      <h3 className="font-medium group-hover:underline">{member.name}</h3>
+                      <p className="text-sm text-muted-foreground ">{member.role}</p>
+                    </div>
+                  </a>
+                ))
+              )}
             </div>
-
-            <div className="flex justify-center mt-8">
-              <Link href="/mentors">
-                <Button variant="outline">View All Mentors</Button>
-              </Link>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="community" className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              {/* Community Team would be listed here */}
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} className="flex flex-col items-center text-center space-y-2">
-                  <div className="relative w-24 h-24 rounded-full overflow-hidden">
-                    <Image
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-mqSImhcpQVcNR5qvCyOav9qYXJf6pl.png"
-                      alt={`Community Team Member ${i + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <h3 className="font-medium">Team Member {i + 1}</h3>
-                    <p className="text-sm text-muted-foreground">Role</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </TabsContent>
-        </Tabs>
+        
       </section>
     </div>
   )
