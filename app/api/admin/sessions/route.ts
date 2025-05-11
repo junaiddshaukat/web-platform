@@ -1,6 +1,11 @@
 import { NextResponse } from 'next/server';
 import { Session } from '@/models/Session';
 import connectDB from '@/lib/db';
+import { cookies } from 'next/headers';
+import { verify } from 'jsonwebtoken';
+import { ActivityLog } from '@/models/ActivityLog';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // GET all sessions
 export async function GET() {
@@ -18,8 +23,24 @@ export async function POST(request: Request) {
   try {
     await connectDB();
     const data = await request.json();
-    const session = new Session({ ...data });
+    // Get admin username from JWT
+    const token = cookies().get('admin-token')?.value;
+    let adminUsername = 'Unknown';
+    if (token && JWT_SECRET) {
+      try {
+        const decoded: any = verify(token, JWT_SECRET as string);
+        adminUsername = decoded.username || 'Unknown';
+      } catch {}
+    }
+    const session = new Session({ ...data, lastModifiedBy: adminUsername });
     await session.save();
+    await ActivityLog.create({
+      entityType: 'Session',
+      entityId: session._id.toString(),
+      action: 'add',
+      adminUsername,
+      details: { name: session.name, date: session.date },
+    });
     return NextResponse.json(session);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create session' }, { status: 500 });
@@ -34,8 +55,24 @@ export async function PUT(request: Request) {
     const id = searchParams.get('id');
     if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     const data = await request.json();
-    const session = await Session.findByIdAndUpdate(id, { ...data }, { new: true });
+    // Get admin username from JWT
+    const token = cookies().get('admin-token')?.value;
+    let adminUsername = 'Unknown';
+    if (token && JWT_SECRET) {
+      try {
+        const decoded: any = verify(token, JWT_SECRET as string);
+        adminUsername = decoded.username || 'Unknown';
+      } catch {}
+    }
+    const session = await Session.findByIdAndUpdate(id, { ...data, lastModifiedBy: adminUsername }, { new: true });
     if (!session) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    await ActivityLog.create({
+      entityType: 'Session',
+      entityId: session._id.toString(),
+      action: 'edit',
+      adminUsername,
+      details: { name: session.name, date: session.date },
+    });
     return NextResponse.json(session);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to update session' }, { status: 500 });
@@ -49,8 +86,23 @@ export async function DELETE(request: Request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
+    const token = cookies().get('admin-token')?.value;
+    let adminUsername = 'Unknown';
+    if (token && JWT_SECRET) {
+      try {
+        const decoded: any = verify(token, JWT_SECRET as string);
+        adminUsername = decoded.username || 'Unknown';
+      } catch {}
+    }
     const session = await Session.findByIdAndDelete(id);
     if (!session) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    await ActivityLog.create({
+      entityType: 'Session',
+      entityId: session._id.toString(),
+      action: 'delete',
+      adminUsername,
+      details: { name: session.name, date: session.date },
+    });
     return NextResponse.json({ message: 'Deleted successfully' });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to delete session' }, { status: 500 });

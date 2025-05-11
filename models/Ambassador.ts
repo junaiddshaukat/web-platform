@@ -21,6 +21,10 @@ const ambassadorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  lastModifiedBy: {
+    type: String,
+    default: 'Unknown',
+  },
   createdAt: {
     type: Date,
     default: Date.now,

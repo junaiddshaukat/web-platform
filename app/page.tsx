@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -24,27 +26,28 @@ import {
 } from "lucide-react";
 import MentorsPage from "@/components/MentorsPage";
 import GoogleCalendar from "@/components/google_calender";
+import { useState } from "react";
 
 const testimonials = [
   {
-    name: "Alex Rivera",
-    role: "Frontend Developer",
+    name: "Saqlain",
+    role: "GSoC @ Chromium",
     quote:
-      "The mentorship I received at Dev Weekends completely transformed my career. I went from struggling with basic concepts to landing a job as a frontend developer in just 6 months.",
-    image: "/client-1.jpg",
+      "Dev Weekends was originally founded to empower students of the University of Education. Today, it has grown into a national initiative, helping underserved students across Pakistan break into international remote job markets and become shining stars in the tech world.\n\nI'm truly proud to be a part of this organization. I have been serving as an instructor for the past two and a half years, and it has been an honor to contribute to its mission. With the guidance of the amazing mentors at Dev Weekends, I was able to crack Google Summer of Code. Today, I'm a well-rounded full-stack software engineer because of their constant support and mentorship. 🙌",
+    image: "/client-3.jpg",
   },
   {
-    name: "Jamie Lee",
-    role: "DevOps Engineer",
+    name: "M Salman",
+    role: "GSoC @ FOSSology",
     quote:
-      "The DevOps sessions were incredibly practical. I was able to implement what I learned immediately at work, which impressed my team and led to a promotion.",
-    image: "/client-2.jpg",
+      "I'm super thankful for the Dev Weekends community! The mentorship, mentors, fellow members, resources, and support helped me a lot in cracking GSoC and development journey. Huge thanks to Zeeshan Bhai and the Dev Weekends core team. This community helped me level up my skills and even cracked GSoC and much more! I am excited to see Dev Weekends grow even more in the future, InshAllah. Best wishes and prayers!",
+    image: "/client-3.jpg",
   },
   {
-    name: "Taylor Morgan",
-    role: "Cloud Solutions Architect",
+    name: "M Shehroz",
+    role: "Software Engineer @ Unanime Planet",
     quote:
-      "As someone transitioning into tech from a non-technical background, the supportive community at Dev Weekends made all the difference. The mentors are patient and truly care about your growth.",
+      "I'm overwhelmed with gratitude for the Dev Weekend community! From guiding me through learning the tech stack to polishing my skills as a full-stack engineer, they've been my rock throughout my journey.\n\nTheir expert guidance and preparation for remote job interviews were invaluable. They helped me navigate the application process, and their support during the different phases of interviews was instrumental in my success.\n\nI struggled with many interviews, facing rejections in behavioral, technical, DSA, and team interviews. But the community's motivation and encouragement kept me going. Their words of affirmation - 'You're almost there, just one step away' - became my mantra.\n\nThanks to Dev Weekend, I've landed my dream job and am now enjoying it. If you're struggling to break into the industry, I highly recommend joining this community. They'll provide you with the guidance, support, and motivation you need to succeed.\n\nThank you, Dev Weekend, for believing in me and helping me achieve my goals!",
     image: "/client-3.jpg",
   },
 ];
@@ -395,38 +398,51 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-            {testimonials.map((testimonial, index) => (
-              <Card
-                key={index}
-                className="bg-card hover:shadow-lg transition-shadow duration-300 border-2 border-border"
-              >
-                <CardContent className="pt-6">
-                  <div className="mb-6 p-6 bg-muted rounded-lg relative">
-                    <div className="absolute -bottom-4 left-6 w-0 h-0 border-l-[12px] border-l-transparent border-t-[16px] border-t-muted border-r-[12px] border-r-transparent"></div>
-                    <p className="italic text-muted-foreground">
-                      {testimonial.quote}
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3 border-2 border-primary">
-                      <Image
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        width={48}
-                        height={48}
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="font-medium">{testimonial.name}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {testimonial.role}
+            {testimonials.map((testimonial, index) => {
+              const [showTooltip, setShowTooltip] = useState(false);
+              return (
+                <Card
+                  key={index}
+                  className="bg-card hover:shadow-lg transition-shadow duration-300 border-2 border-border relative"
+                >
+                  <CardContent className="pt-6">
+                    <div className="mb-6 p-6 bg-muted rounded-lg relative group"
+                      onMouseEnter={() => setShowTooltip(true)}
+                      onMouseLeave={() => setShowTooltip(false)}
+                      onFocus={() => setShowTooltip(true)}
+                      onBlur={() => setShowTooltip(false)}
+                      tabIndex={0}
+                    >
+                      <div className="absolute -bottom-4 left-6 w-0 h-0 border-l-[12px] border-l-transparent border-t-[16px] border-t-muted border-r-[12px] border-r-transparent"></div>
+                      <p className="italic text-muted-foreground line-clamp-6 cursor-pointer">
+                        {testimonial.quote}
                       </p>
+                      {showTooltip && (
+                        <div className="absolute left-1/2 top-0 z-50 -translate-x-1/2 -translate-y-full bg-zinc-900 text-white p-4 rounded-lg shadow-lg w-[320px] max-w-[90vw] text-sm flex flex-col items-center">
+                          <div className="mb-2 text-left w-full">{testimonial.quote}</div>
+                          <div className="w-0 h-0 border-l-[12px] border-l-transparent border-b-[16px] border-b-zinc-900 border-r-[12px] border-r-transparent mt-2"></div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                    <div className="flex items-center">
+                      <div className="relative h-12 w-12 rounded-full overflow-hidden mr-3 border-2 border-primary">
+                        <Image
+                          src={testimonial.image}
+                          alt={testimonial.name}
+                          width={48}
+                          height={48}
+                          className="object-cover"
+                        />
+                      </div>
+                      <div>
+                        <p className="font-medium">{testimonial.name}</p>
+                        <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>

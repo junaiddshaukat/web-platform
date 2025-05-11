@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar */}
       <aside
         className={`
-          fixed md:static z-40 top-16 md:top-0 left-0 h-[calc(100vh-4rem)] md:h-auto ${sidebarWidth} bg-white dark:bg-zinc-900 border-r border-border flex flex-col transition-all duration-300
+          fixed md:static z-40 top-16 md:top-0 left-0 h-[calc(100vh-4rem)] md:h-auto ${sidebarWidth}  border-r border-border flex flex-col transition-all duration-300
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           md:translate-x-0
           shadow-lg md:shadow-none
@@ -101,7 +101,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Overlay for mobile sidebar */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-30 bg-black/30 md:hidden"
+          className="fixed inset-0 z-30  md:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-label="Close sidebar overlay"
         />

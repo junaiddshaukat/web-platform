@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 import { Ambassador } from '@/models/Ambassador';
 import connectDB from '@/lib/db';
 import { v2 as cloudinary } from 'cloudinary';
+import { cookies } from 'next/headers';
+import { verify } from 'jsonwebtoken';
+import { ActivityLog } from '@/models/ActivityLog';
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Configure Cloudinary
 cloudinary.config({
@@ -30,6 +35,16 @@ export async function POST(request: Request) {
     await connectDB();
     const data = await request.json();
 
+    // Get admin username from JWT
+    const token = cookies().get('admin-token')?.value;
+    let adminUsername = 'Unknown';
+    if (token && JWT_SECRET) {
+      try {
+        const decoded: any = verify(token, JWT_SECRET as string);
+        adminUsername = decoded.username || 'Unknown';
+      } catch {}
+    }
+
     // Upload image to Cloudinary if it's a base64 string
     let imageUrl = data.image;
     if (data.image.startsWith('data:image')) {
@@ -42,9 +57,17 @@ export async function POST(request: Request) {
     const ambassador = new Ambassador({
       ...data,
       image: imageUrl,
+      lastModifiedBy: adminUsername,
     });
 
     await ambassador.save();
+    await ActivityLog.create({
+      entityType: 'Ambassador',
+      entityId: ambassador._id.toString(),
+      action: 'add',
+      adminUsername,
+      details: { name: ambassador.name, university: ambassador.university },
+    });
     return NextResponse.json(ambassador);
   } catch (error) {
     return NextResponse.json(
@@ -69,9 +92,18 @@ export async function PUT(request: Request) {
     }
 
     const data = await request.json();
+    // Get admin username from JWT
+    const token = cookies().get('admin-token')?.value;
+    let adminUsername = 'Unknown';
+    if (token && JWT_SECRET) {
+      try {
+        const decoded: any = verify(token, JWT_SECRET as string);
+        adminUsername = decoded.username || 'Unknown';
+      } catch {}
+    }
     const ambassador = await Ambassador.findByIdAndUpdate(
       id,
-      { ...data },
+      { ...data, lastModifiedBy: adminUsername },
       { new: true }
     );
 
@@ -82,6 +114,13 @@ export async function PUT(request: Request) {
       );
     }
 
+    await ActivityLog.create({
+      entityType: 'Ambassador',
+      entityId: ambassador._id.toString(),
+      action: 'edit',
+      adminUsername,
+      details: { name: ambassador.name, university: ambassador.university },
+    });
     return NextResponse.json(ambassador);
   } catch (error) {
     return NextResponse.json(
@@ -118,6 +157,23 @@ export async function DELETE(request: Request) {
       const publicId = ambassador.image.split('/').slice(-1)[0].split('.')[0];
       await cloudinary.uploader.destroy(publicId);
     }
+
+    // In DELETE, extract adminUsername from JWT
+    const token = cookies().get('admin-token')?.value;
+    let adminUsername = 'Unknown';
+    if (token && JWT_SECRET) {
+      try {
+        const decoded: any = verify(token, JWT_SECRET as string);
+        adminUsername = decoded.username || 'Unknown';
+      } catch {}
+    }
+    await ActivityLog.create({
+      entityType: 'Ambassador',
+      entityId: ambassador._id.toString(),
+      action: 'delete',
+      adminUsername,
+      details: { name: ambassador.name, university: ambassador.university },
+    });
 
     return NextResponse.json({ message: 'Ambassador deleted successfully' });
   } catch (error) {

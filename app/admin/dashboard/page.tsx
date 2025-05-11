@@ -9,16 +9,29 @@ interface AmbassadorRecent {
   name: string;
   university: string;
   bio: string;
+  lastModifiedBy?: string;
 }
 interface CoreTeamRecent {
   name: string;
   role: string;
+  lastModifiedBy?: string;
 }
 interface SessionRecent {
   name: string;
   date: string;
   time: string;
   description: string;
+  lastModifiedBy?: string;
+}
+
+interface ActivityLogEntry {
+  _id: string;
+  entityType: string;
+  entityId: string;
+  action: string;
+  adminUsername: string;
+  timestamp: string;
+  details?: { name?: string; university?: string; role?: string; date?: string };
 }
 
 export default function AdminDashboard() {
@@ -47,8 +60,11 @@ export default function AdminDashboard() {
     sessions: 0,
   });
 
+  const [activityLog, setActivityLog] = useState<ActivityLogEntry[]>([]);
+
   useEffect(() => {
     fetchStats();
+    fetchActivityLog();
     // eslint-disable-next-line
   }, []);
 
@@ -101,6 +117,13 @@ export default function AdminDashboard() {
     setRefreshing(false);
   }
 
+  async function fetchActivityLog() {
+    const res = await fetch('/api/admin/activity-log?limit=20');
+    if (res.ok) {
+      setActivityLog(await res.json());
+    }
+  }
+
   return (
     <div className="container py-8">
       <div className="flex items-center justify-between mb-8">
@@ -132,39 +155,22 @@ export default function AdminDashboard() {
       {/* Recent Activity */}
       <div className="mt-12">
         <h2 className="text-2xl font-bold mb-4">Recent Activity</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <div className="p-4 bg-card rounded-lg border">
-            <h3 className="font-semibold mb-2 flex items-center gap-2"><Users className="w-5 h-5" /> Latest Ambassador</h3>
-            {recent.ambassador ? (
+        <div className="space-y-4">
+          {activityLog.length === 0 && <div className="text-muted-foreground">No recent activity.</div>}
+          {activityLog.map((log) => (
+            <div key={log._id} className="p-4 bg-card rounded-lg border flex flex-col md:flex-row md:items-center md:justify-between gap-2">
               <div>
-                <div className="font-bold">{recent.ambassador.name}</div>
-                <div className="text-muted-foreground text-sm">{recent.ambassador.university}</div>
-                <div className="text-xs mt-1 line-clamp-2">{recent.ambassador.bio}</div>
-                <div className="text-xs text-muted-foreground mt-2">Last modified by: <span className="font-semibold">admin</span></div>
+                <span className="font-semibold capitalize">{log.action}</span> {log.entityType}
+                {log.details?.name && <span>: <span className="font-semibold">{log.details.name}</span></span>}
+                {log.details?.university && <span className="ml-2 text-xs text-muted-foreground">({log.details.university})</span>}
+                {log.details?.role && <span className="ml-2 text-xs text-muted-foreground">({log.details.role})</span>}
+                {log.details?.date && <span className="ml-2 text-xs text-muted-foreground">({log.details.date})</span>}
               </div>
-            ) : <div className="text-muted-foreground text-sm">No ambassadors yet.</div>}
-          </div>
-          <div className="p-4 bg-card rounded-lg border">
-            <h3 className="font-semibold mb-2 flex items-center gap-2"><Users2 className="w-5 h-5" /> Latest Core Team</h3>
-            {recent.coreTeam ? (
-              <div>
-                <div className="font-bold">{recent.coreTeam.name}</div>
-                <div className="text-muted-foreground text-sm">{recent.coreTeam.role}</div>
-                <div className="text-xs text-muted-foreground mt-2">Last modified by: <span className="font-semibold">admin</span></div>
+              <div className="text-xs text-muted-foreground">
+                By <span className="font-semibold">{log.adminUsername}</span> &middot; {new Date(log.timestamp).toLocaleString()}
               </div>
-            ) : <div className="text-muted-foreground text-sm">No core team members yet.</div>}
-          </div>
-          <div className="p-4 bg-card rounded-lg border">
-            <h3 className="font-semibold mb-2 flex items-center gap-2"><CalendarDays className="w-5 h-5" /> Latest Session</h3>
-            {recent.session ? (
-              <div>
-                <div className="font-bold">{recent.session.name}</div>
-                <div className="text-muted-foreground text-sm">{recent.session.date} at {recent.session.time}</div>
-                <div className="text-xs mt-1 line-clamp-2">{recent.session.description}</div>
-                <div className="text-xs text-muted-foreground mt-2">Last modified by: <span className="font-semibold">admin</span></div>
-              </div>
-            ) : <div className="text-muted-foreground text-sm">No sessions yet.</div>}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
