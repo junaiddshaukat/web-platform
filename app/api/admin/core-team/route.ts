@@ -5,6 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { cookies } from 'next/headers';
 import { verify } from 'jsonwebtoken';
 import { ActivityLog } from '@/models/ActivityLog';
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -31,7 +32,8 @@ export async function POST(request: Request) {
     await connectDB();
     const data = await request.json();
     // Get admin username from JWT
-    const token = cookies().get('admin-token')?.value;
+    const cookieStore: ReadonlyRequestCookies = await cookies();
+    const token = cookieStore.get('admin-token')?.value;
     let adminUsername = 'Unknown';
     if (token && JWT_SECRET) {
       try {
@@ -68,7 +70,8 @@ export async function PUT(request: Request) {
     if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
     const data = await request.json();
     // Get admin username from JWT
-    const token = cookies().get('admin-token')?.value;
+    const cookieStore: ReadonlyRequestCookies = await cookies();
+    const token = cookieStore.get('admin-token')?.value;
     let adminUsername = 'Unknown';
     if (token && JWT_SECRET) {
       try {
@@ -98,7 +101,8 @@ export async function DELETE(request: Request) {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');
     if (!id) return NextResponse.json({ error: 'ID is required' }, { status: 400 });
-    const token = cookies().get('admin-token')?.value;
+    const cookieStore: ReadonlyRequestCookies = await cookies();
+    const token = cookieStore.get('admin-token')?.value;
     let adminUsername = 'Unknown';
     if (token && JWT_SECRET) {
       try {
