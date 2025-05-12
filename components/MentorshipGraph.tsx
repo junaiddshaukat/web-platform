@@ -90,7 +90,6 @@ export default function MentorshipGraph({
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
 
   // Graph parameters
-  const nodeRelSize = 10
   const mentorSize = 15
   const menteeSize = 12
 
@@ -255,7 +254,7 @@ export default function MentorshipGraph({
     return node.type === "mentor" ? mentorSize : menteeSize
   }
 
-  const handleNodeClick = (node: any) => {
+  const handleNodeClick = (node: NodeObject) => {
     if (!node) return
     
     console.log("Node clicked:", node);
@@ -297,7 +296,7 @@ export default function MentorshipGraph({
     }
   }
 
-  const handleNodeHover = (node: any) => {
+  const handleNodeHover = (node: NodeObject | null) => {
     if (!node) {
       setHoveredNode(null)
       return
@@ -316,7 +315,7 @@ export default function MentorshipGraph({
     setExpandedRows(newExpanded)
   }
 
-  const nodeCanvasObject = (node: GraphNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
+  const nodeCanvasObject = (node: GraphNode, ctx: CanvasRenderingContext2D) => {
     const size = getNodeRadius(node) * 2
     const x = node.x || 0
     const y = node.y || 0
@@ -377,6 +376,7 @@ export default function MentorshipGraph({
                     <tr className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={mentor.picture || '/avatar.svg'} alt={mentor.name} className="w-8 h-8 rounded-full object-cover" />
                           <span className="ml-3 font-medium text-gray-900 dark:text-gray-100">{mentor.name}</span>
                         </div>
@@ -411,6 +411,7 @@ export default function MentorshipGraph({
                             <div className="space-y-3">
                               {mentorMentees.map((mentee) => (
                                 <div key={mentee._id.toString()} className="flex items-center gap-3">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img src={mentee.picture || '/avatar.svg'} alt={mentee.name} className="w-6 h-6 rounded-full object-cover" />
                                   <span className="text-gray-700 dark:text-gray-300">{mentee.name}</span>
                                   <span className="text-gray-500 dark:text-gray-400 text-sm">({mentee.university})</span>
@@ -428,6 +429,7 @@ export default function MentorshipGraph({
                 <tr key={mentee._id.toString()} className="hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={mentee.picture || '/avatar.svg'} alt={mentee.name} className="w-8 h-8 rounded-full object-cover" />
                       <span className="ml-3 font-medium text-gray-900 dark:text-gray-100">{mentee.name}</span>
                     </div>
@@ -448,8 +450,8 @@ export default function MentorshipGraph({
           ref={graph2DRef}
           graphData={graphData}
           nodeCanvasObject={nodeCanvasObject}
-          nodePointerAreaPaint={(node: any, color, ctx) => {
-            const graphNode = node as GraphNode
+          nodePointerAreaPaint={(node: NodeObject, color, ctx) => {
+            const graphNode = node as unknown as GraphNode
             const size = getNodeRadius(graphNode) * 2
             ctx.beginPath()
             ctx.arc(graphNode.x || 0, graphNode.y || 0, size, 0, 2 * Math.PI)
@@ -483,6 +485,7 @@ export default function MentorshipGraph({
               
               <div className="flex items-center gap-4">
                 {selectedNode.picture ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
                   <img
                     src={selectedNode.picture}
                     alt={selectedNode.name}
@@ -545,14 +548,15 @@ export default function MentorshipGraph({
                         const menteeNodeId = selectedNode.id.toString();
                         
                         // Handle different mentor reference formats (string ID or object)
-                        const mentorValue = m.mentor as any;
-                        if (typeof mentorValue === 'object' && mentorValue && mentorValue._id) {
+                        const mentorValue = m.mentor;
+                        if (typeof mentorValue === 'object' && mentorValue && '_id' in mentorValue) {
                           return mentorValue._id.toString() === menteeNodeId;
                         }
                         return mentorValue?.toString() === menteeNodeId;
                       })
                       .map((mentee) => (
                         <div key={mentee._id.toString()} className="flex items-center gap-3">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={mentee.picture || '/avatar.svg'} alt={mentee.name} className="w-8 h-8 rounded-full object-cover" />
                           <div>
                             <div className="font-medium text-gray-900 dark:text-white">{mentee.name}</div>
@@ -561,22 +565,23 @@ export default function MentorshipGraph({
                         </div>
                       ))
                   ) : (
-                    // Show mentor for a mentee - Enhanced debugging approach
+                    // Show mentor for a mentee
                     (() => {
                       console.log("Mentee node selected:", selectedNode);
                       console.log("Available mentors:", mentors);
                       
                       // First try to get the mentor from the selectedNode if it's an object
-                      const mentorValue = selectedNode.mentor as any;
+                      const mentorValue = selectedNode.mentor;
                       
                       // Better debug information to trace the issue
                       console.log("Mentor value type:", typeof mentorValue);
                       console.log("Mentor value:", mentorValue);
                       
-                      if (typeof mentorValue === 'object' && mentorValue && mentorValue._id) {
+                      if (typeof mentorValue === 'object' && mentorValue && '_id' in mentorValue) {
                         console.log("Found mentor as object:", mentorValue);
                         return (
                           <div className="flex items-center gap-3">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
                               src={mentorValue.picture || '/avatar.svg'} 
                               alt={mentorValue.name} 
@@ -607,6 +612,7 @@ export default function MentorshipGraph({
                           console.log("Found matching mentor:", matchingMentor);
                           return (
                             <div className="flex items-center gap-3">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img 
                                 src={matchingMentor.picture || '/avatar.svg'} 
                                 alt={matchingMentor.name} 
@@ -632,8 +638,8 @@ export default function MentorshipGraph({
                   {/* Show message if no mentees found */}
                   {selectedNode.type === "mentor" && 
                    mentees.filter(m => {
-                     const mentorValue = m.mentor as any;
-                     if (typeof mentorValue === 'object' && mentorValue && mentorValue._id) {
+                     const mentorValue = m.mentor;
+                     if (typeof mentorValue === 'object' && mentorValue && '_id' in mentorValue) {
                        return mentorValue._id.toString() === selectedNode.id.toString();
                      }
                      return mentorValue?.toString() === selectedNode.id.toString();

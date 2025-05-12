@@ -4,12 +4,37 @@ import React, { useEffect, useState } from "react"
 import MentorshipGraph from "@/components/MentorshipGraph"
 import { ZoomIn, ZoomOut, Maximize2, RefreshCw, Target, Network, Table, ChevronDown, ChevronUp } from "lucide-react"
 
+interface Mentor {
+  _id: string
+  name: string
+  picture?: string
+  university?: string
+  email: string
+  phone?: string
+  linkedin?: string
+  github?: string
+  leetcode?: string
+}
+
+interface Mentee {
+  _id: string
+  name: string
+  picture?: string
+  university?: string
+  email?: string
+  phone?: string
+  linkedin?: string
+  github?: string
+  leetcode?: string
+  mentor?: string | { _id: string; name: string; university?: string; picture?: string }
+}
+
 const VIEW_OPTIONS = [
   { key: "spider", label: "Spider Web", icon: Network },
   { key: "table", label: "Table", icon: Table },
 ]
 
-function TableView({ mentors, mentees }: any) {
+function TableView({ mentors, mentees }: { mentors: Mentor[], mentees: Mentee[] }) {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set())
 
   const toggleRow = (id: string) => {
@@ -46,8 +71,8 @@ function TableView({ mentors, mentees }: any) {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {mentors.map((mentor: any) => {
-                const mentorMentees = mentees.filter((m: any) =>
+              {mentors.map((mentor) => {
+                const mentorMentees = mentees.filter((m) =>
                   typeof m.mentor === "object"
                     ? m.mentor._id?.toString() === mentor._id.toString()
                     : m.mentor?.toString() === mentor._id.toString(),
@@ -58,6 +83,7 @@ function TableView({ mentors, mentees }: any) {
                     <tr className="hover:bg-muted/50 transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={mentor.picture || "/avatar.svg"}
                             alt={mentor.name}
@@ -141,11 +167,12 @@ function TableView({ mentors, mentees }: any) {
                           <div className="pl-11">
                             <h4 className="text-sm font-medium mb-3">Mentees</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                              {mentorMentees.map((mentee: any) => (
+                              {mentorMentees.map((mentee) => (
                                 <div
                                   key={mentee._id.toString()}
                                   className="flex items-center gap-3 p-3 border rounded-lg bg-card"
                                 >
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
                                   <img
                                     src={mentee.picture || "/avatar.svg"}
                                     alt={mentee.name}
@@ -194,17 +221,18 @@ function TableView({ mentors, mentees }: any) {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {mentees.map((mentee: any) => {
+              {mentees.map((mentee) => {
                 // Find mentor info
                 const mentorInfo =
                   typeof mentee.mentor === "object" && mentee.mentor && mentee.mentor._id
                     ? mentee.mentor
-                    : mentors.find((m: any) => m._id.toString() === mentee.mentor?.toString())
+                    : mentors.find((m) => m._id.toString() === mentee.mentor?.toString())
 
                 return (
                   <tr key={mentee._id.toString()} className="hover:bg-muted/50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={mentee.picture || "/avatar.svg"}
                           alt={mentee.name}
@@ -264,6 +292,7 @@ function TableView({ mentors, mentees }: any) {
                     <td className="px-6 py-4 whitespace-nowrap">
                       {mentorInfo ? (
                         <div className="flex items-center">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={mentorInfo.picture || "/avatar.svg"}
                             alt={mentorInfo.name}
@@ -287,8 +316,8 @@ function TableView({ mentors, mentees }: any) {
 }
 
 export default function MentorshipPage() {
-  const [mentors, setMentors] = useState<any[]>([])
-  const [mentees, setMentees] = useState<any[]>([])
+  const [mentors, setMentors] = useState<Mentor[]>([])
+  const [mentees, setMentees] = useState<Mentee[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [view, setView] = useState("spider")
@@ -303,8 +332,9 @@ export default function MentorshipPage() {
         const { mentors, mentees } = await res.json()
         setMentors(mentors)
         setMentees(mentees)
-      } catch (err) {
+      } catch (error) {
         setError("Failed to load mentorship data.")
+        console.error(error)
       } finally {
         setLoading(false)
       }

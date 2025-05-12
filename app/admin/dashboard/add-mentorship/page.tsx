@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { Trash2, Edit, Plus, Search, X, ArrowLeft } from "lucide-react"
+import { Suspense } from "react"
 
 type PersonType = "mentor" | "mentee"
 type Mode = "create" | "edit" | "list"
@@ -38,7 +39,7 @@ interface FormData {
   isMentor?: boolean
 }
 
-export default function MentorshipManagementPage() {
+function MentorshipManagementContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const editId = searchParams.get("edit")
@@ -643,5 +644,13 @@ export default function MentorshipManagementPage() {
 
       {mode === "list" ? renderListSection() : renderFormSection()}
     </div>
+  )
+}
+
+export default function MentorshipManagementPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <MentorshipManagementContent />
+    </Suspense>
   )
 }

@@ -1,11 +1,8 @@
 'use client'
 
 import Image from "next/image"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Lightbulb, Handshake, Globe, GraduationCap, Share2 } from "lucide-react"
-import Link from "next/link"
+import { Lightbulb, Handshake, GraduationCap, Share2 } from "lucide-react"
 import { useEffect, useState } from "react"
 
 interface CoreTeamMember {

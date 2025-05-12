@@ -6,7 +6,7 @@ if (!JWT_SECRET) {
 }
 
 interface JWTPayload {
-  [key: string]: any;
+  [key: string]: string | number | boolean | null | undefined;
   iat?: number;
   exp?: number;
 }

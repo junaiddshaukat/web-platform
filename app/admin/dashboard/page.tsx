@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
-import { Users, Users2, CalendarDays, RefreshCw, PartyPopper } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Users, Users2, CalendarDays, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Add types for recent activity
@@ -42,7 +42,7 @@ export default function AdminDashboard() {
     loading: true,
   });
   const [refreshing, setRefreshing] = useState(false);
-  const [recent, setRecent] = useState<{
+  const [recentItems, setRecentItems] = useState<{
     ambassador: AmbassadorRecent | null;
     coreTeam: CoreTeamRecent | null;
     session: SessionRecent | null;
@@ -51,7 +51,6 @@ export default function AdminDashboard() {
     coreTeam: null,
     session: null,
   });
-  const prevStats = useRef(stats);
 
   // Animated count up
   const [displayStats, setDisplayStats] = useState({
@@ -109,7 +108,7 @@ export default function AdminDashboard() {
       sessions: Array.isArray(sessions) ? sessions.length : 0,
       loading: false,
     });
-    setRecent({
+    setRecentItems({
       ambassador: Array.isArray(ambassadors) && ambassadors[0] ? ambassadors[0] : null,
       coreTeam: Array.isArray(coreTeam) && coreTeam[0] ? coreTeam[0] : null,
       session: Array.isArray(sessions) && sessions[0] ? sessions[0] : null,

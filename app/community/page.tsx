@@ -38,7 +38,7 @@ export default function CommunityPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  I'm working with a small team of 5 developers and we're looking to improve our CI/CD pipeline. What
+                  I&apos;m working with a small team of 5 developers and we&apos;re looking to improve our CI/CD pipeline. What
                   are some best practices that have worked well for other small teams?
                 </p>
               </CardContent>
@@ -88,8 +88,8 @@ export default function CommunityPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  I've been using React Server Components in production for a few months now. Let's share experiences,
-                  patterns, and challenges we've encountered.
+                  I&apos;ve been using React Server Components in production for a few months now. Let&apos;s share experiences,
+                  patterns, and challenges we&apos;ve encountered.
                 </p>
               </CardContent>
               <CardFooter>
