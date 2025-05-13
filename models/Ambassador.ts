@@ -21,6 +21,10 @@ const ambassadorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  leetcode: {
+    type: String,
+    required: false,
+  },
   lastModifiedBy: {
     type: String,
     default: 'Unknown',

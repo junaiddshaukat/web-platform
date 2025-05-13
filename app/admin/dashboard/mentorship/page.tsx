@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import dynamic from "next/dynamic"
+import Image from "next/image"
 import {
   Network,
   Table,
@@ -124,12 +125,15 @@ function TableView({ mentors, mentees }: any) {
                               href={mentor.linkedin}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-foreground/70 hover:text-primary"
+                              className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                               title="LinkedIn"
                             >
-                              <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                              </svg>
+                              <Image
+                                src="/linkedin.png"
+                                alt="LinkedIn"
+                                width={18}
+                                height={18}
+                              />
                             </a>
                           )}
                           {mentor.github && (
@@ -154,12 +158,15 @@ function TableView({ mentors, mentees }: any) {
                               href={mentor.leetcode}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-foreground/70 hover:text-orange-500"
+                              className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                               title="LeetCode"
                             >
-                              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.111.744 1.715.744 1.31 0 2.315-.925 2.315-2.301 0-.688-.28-1.357-.783-1.85l-3.137-3.082c-1.576-1.576-3.709-2.392-5.85-2.392-2.142 0-4.275.816-5.851 2.392l-4.872 4.914c-1.561 1.576-2.392 3.709-2.392 5.851s.83 4.276 2.392 5.851l4.886 4.914c1.576 1.576 3.709 2.392 5.851 2.392s4.275-.816 5.851-2.392l3.137-3.082c.516-.503.783-1.173.783-1.845 0-1.123-.728-2.301-2.198-2.301-.604 0-1.201.227-1.715.741z" />
-                              </svg>
+                              <Image
+                                src="/leetcode.png"
+                                alt="LeetCode"
+                                width={18}
+                                height={18}
+                              />
                             </a>
                           )}
                         </div>
@@ -294,12 +301,15 @@ function TableView({ mentors, mentees }: any) {
                             href={mentee.linkedin}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-foreground/70 hover:text-primary"
+                            className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                             title="LinkedIn"
                           >
-                            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                              <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                            </svg>
+                            <Image
+                              src="/linkedin.png"
+                              alt="LinkedIn"
+                              width={18}
+                              height={18}
+                            />
                           </a>
                         )}
                         {mentee.github && (
@@ -324,12 +334,15 @@ function TableView({ mentors, mentees }: any) {
                             href={mentee.leetcode}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-foreground/70 hover:text-orange-500"
+                            className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                             title="LeetCode"
                           >
-                            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                              <path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.111.744 1.715.744 1.31 0 2.315-.925 2.315-2.301 0-.688-.28-1.357-.783-1.85l-3.137-3.082c-1.576-1.576-3.709-2.392-5.85-2.392-2.142 0-4.275.816-5.851 2.392l-4.872 4.914c-1.561 1.576-2.392 3.709-2.392 5.851s.83 4.276 2.392 5.851l4.886 4.914c1.576 1.576 3.709 2.392 5.851 2.392s4.275-.816 5.851-2.392l3.137-3.082c.516-.503.783-1.173.783-1.845 0-1.123-.728-2.301-2.198-2.301-.604 0-1.201.227-1.715.741z" />
-                            </svg>
+                            <Image
+                              src="/leetcode.png"
+                              alt="LeetCode"
+                              width={18}
+                              height={18}
+                            />
                           </a>
                         )}
                       </div>
@@ -465,11 +478,14 @@ function GalleryView({ mentors, mentees }: any) {
                         href={mentor.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-foreground/70 hover:text-primary"
+                        className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                       >
-                        <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                        </svg>
+                        <Image
+                          src="/linkedin.png"
+                          alt="LinkedIn"
+                          width={18}
+                          height={18}
+                        />
                       </a>
                     )}
 
@@ -495,11 +511,14 @@ function GalleryView({ mentors, mentees }: any) {
                         href={mentor.leetcode}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-foreground/70 hover:text-orange-500"
+                        className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                       >
-                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.111.744 1.715.744 1.31 0 2.315-.925 2.315-2.301 0-.688-.28-1.357-.783-1.85l-3.137-3.082c-1.576-1.576-3.709-2.392-5.85-2.392-2.142 0-4.275.816-5.851 2.392l-4.872 4.914c-1.561 1.576-2.392 3.709-2.392 5.851s.83 4.276 2.392 5.851l4.886 4.914c1.576 1.576 3.709 2.392 5.851 2.392s4.275-.816 5.851-2.392l3.137-3.082c.516-.503.783-1.173.783-1.845 0-1.123-.728-2.301-2.198-2.301-.604 0-1.201.227-1.715.741z" />
-                        </svg>
+                        <Image
+                          src="/leetcode.png"
+                          alt="LeetCode"
+                          width={18}
+                          height={18}
+                        />
                       </a>
                     )}
                   </div>
@@ -637,11 +656,14 @@ function GalleryView({ mentors, mentees }: any) {
                       href={mentee.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-foreground/70 hover:text-primary"
+                      className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                     >
-                      <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
-                      </svg>
+                      <Image
+                        src="/linkedin.png"
+                        alt="LinkedIn"
+                        width={18}
+                        height={18}
+                      />
                     </a>
                   )}
 
@@ -667,11 +689,14 @@ function GalleryView({ mentors, mentees }: any) {
                       href={mentee.leetcode}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-foreground/70 hover:text-orange-500"
+                      className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
                     >
-                      <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M16.102 17.93l-2.697 2.607c-.466.467-1.111.662-1.823.662s-1.357-.195-1.824-.662l-4.332-4.363c-.467-.467-.702-1.15-.702-1.863s.235-1.357.702-1.824l4.319-4.38c.467-.467 1.125-.645 1.837-.645s1.357.195 1.823.662l2.697 2.606c.514.515 1.111.744 1.715.744 1.31 0 2.315-.925 2.315-2.301 0-.688-.28-1.357-.783-1.85l-3.137-3.082c-1.576-1.576-3.709-2.392-5.85-2.392-2.142 0-4.275.816-5.851 2.392l-4.872 4.914c-1.561 1.576-2.392 3.709-2.392 5.851s.83 4.276 2.392 5.851l4.886 4.914c1.576 1.576 3.709 2.392 5.851 2.392s4.275-.816 5.851-2.392l3.137-3.082c.516-.503.783-1.173.783-1.845 0-1.123-.728-2.301-2.198-2.301-.604 0-1.201.227-1.715.741z" />
-                      </svg>
+                      <Image
+                        src="/leetcode.png"
+                        alt="LeetCode"
+                        width={18}
+                        height={18}
+                      />
                     </a>
                   )}
                 </div>

@@ -16,6 +16,7 @@ interface Ambassador {
   bio: string;
   image: string;
   linkedin: string;
+  leetcode?: string;
 }
 
 export default function AmbassadorsPage() {
@@ -29,7 +30,8 @@ export default function AmbassadorsPage() {
     university: '',
     bio: '',
     image: '',
-    linkedin: ''
+    linkedin: '',
+    leetcode: ''
   });
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
@@ -70,7 +72,8 @@ export default function AmbassadorsPage() {
       university: '',
       bio: '',
       image: '',
-      linkedin: ''
+      linkedin: '',
+      leetcode: ''
     });
     setImageFile(null);
     setImagePreview('');
@@ -142,7 +145,8 @@ export default function AmbassadorsPage() {
       university: ambassador.university,
       bio: ambassador.bio,
       image: ambassador.image,
-      linkedin: ambassador.linkedin
+      linkedin: ambassador.linkedin,
+      leetcode: ambassador.leetcode || ''
     });
     setImagePreview(ambassador.image);
     setEditingId(ambassador._id);
@@ -281,6 +285,16 @@ export default function AmbassadorsPage() {
               />
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="leetcode">LeetCode URL</Label>
+              <Input
+                id="leetcode"
+                type="url"
+                value={formData.leetcode}
+                onChange={(e) => setFormData({ ...formData, leetcode: e.target.value })}
+              />
+            </div>
+
             <div className="flex justify-end space-x-4">
               <Button
                 type="button"
@@ -321,22 +335,58 @@ export default function AmbassadorsPage() {
                 <h3 className="text-lg font-semibold">{ambassador.name}</h3>
                 <p className="text-sm text-muted-foreground mb-2">{ambassador.university}</p>
                 <p className="text-sm mb-4 line-clamp-2">{ambassador.bio}</p>
-                <div className="flex justify-end space-x-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => handleEdit(ambassador)}
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="text-red-500 hover:text-red-600"
-                    onClick={() => handleDelete(ambassador._id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+                <div className="flex items-center justify-between">
+                  <div className="flex space-x-2">
+                    {ambassador.linkedin && (
+                      <a
+                        href={ambassador.linkedin}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
+                        aria-label={`LinkedIn profile of ${ambassador.name}`}
+                      >
+                        <Image
+                          src="/linkedin.png"
+                          alt="LinkedIn"
+                          width={18}
+                          height={18}
+                        />
+                      </a>
+                    )}
+                    {ambassador.leetcode && (
+                      <a
+                        href={ambassador.leetcode}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-white p-1 rounded-full hover:opacity-80 transition-colors border"
+                        aria-label={`LeetCode profile of ${ambassador.name}`}
+                      >
+                        <Image
+                          src="/leetcode.png"
+                          alt="LeetCode"
+                          width={18}
+                          height={18}
+                        />
+                      </a>
+                    )}
+                  </div>
+                  <div className="flex space-x-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => handleEdit(ambassador)}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="text-red-500 hover:text-red-600"
+                      onClick={() => handleDelete(ambassador._id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>

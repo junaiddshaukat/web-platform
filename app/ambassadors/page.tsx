@@ -12,6 +12,7 @@ interface Ambassador {
   bio: string;
   image: string;
   linkedin: string;
+  leetcode?: string;
 }
 
 export default function AmbassadorsPage() {
@@ -114,17 +115,40 @@ export default function AmbassadorsPage() {
                 <div className="p-5">
                   <div className="flex justify-between items-center mb-2">
                     <h3 className="text-xl font-bold">{ambassador.name}</h3>
-                    {ambassador.linkedin && (
-                      <a
-                        href={ambassador.linkedin}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-[#0077B5] text-white p-1.5 rounded-full hover:bg-[#0077B5]/80 transition-colors"
-                        aria-label={`LinkedIn profile of ${ambassador.name}`}
-                      >
-                        <Linkedin size={16} />
-                      </a>
-                    )}
+                    <div className="flex space-x-2">
+                      {ambassador.leetcode && (
+                        <a
+                          href={ambassador.leetcode}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-white p-1 rounded-full hover:opacity-80 transition-colors"
+                          aria-label={`LeetCode profile of ${ambassador.name}`}
+                        >
+                          <Image
+                            src="/leetcode.png"
+                            alt="LeetCode"
+                            width={20}
+                            height={20}
+                          />
+                        </a>
+                      )}
+                      {ambassador.linkedin && (
+                        <a
+                          href={ambassador.linkedin}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="bg-white p-1 rounded-full hover:opacity-80 transition-colors"
+                          aria-label={`LinkedIn profile of ${ambassador.name}`}
+                        >
+                          <Image
+                            src="/linkedin.png"
+                            alt="LinkedIn"
+                            width={20}
+                            height={20}
+                          />
+                        </a>
+                      )}
+                    </div>
                   </div>
                   <p className="text-muted-foreground text-sm mb-2">{ambassador.university}</p>
                   <p className="text-sm line-clamp-3">{ambassador.bio}</p>

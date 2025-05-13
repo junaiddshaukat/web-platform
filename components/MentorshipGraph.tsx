@@ -5,6 +5,7 @@ import ForceGraph2D from "react-force-graph-2d"
 import type { ForceGraphMethods as ForceGraph2DMethods, NodeObject, LinkObject } from "react-force-graph-2d"
 import { useTheme } from "next-themes"
 import { X, Linkedin, Github, Code, Mail, Phone, ChevronDown, ChevronUp } from "lucide-react"
+import NextImage from 'next/image'
 
 interface IMentor {
   _id: string | number
@@ -330,7 +331,8 @@ export default function MentorshipGraph({
 
     // Draw image if available
     if (node.picture && useImages) {
-      const img = new Image()
+      // Use browser's built-in Image constructor, not Next.js Image component
+      const img = new globalThis.Image()
       img.src = node.picture
       
       // Create circular clip path
@@ -340,6 +342,20 @@ export default function MentorshipGraph({
       
       // Draw the image
       ctx.drawImage(img, x - size + 2, y - size + 2, (size - 2) * 2, (size - 2) * 2)
+    } else if (useImages) {
+      // If no picture available, draw a colored circle with initial
+      ctx.fillStyle = node.type === "mentor" ? "#3b82f6" : "#10b981" // Blue for mentor, green for mentee
+      ctx.beginPath()
+      ctx.arc(x, y, size - 2, 0, 2 * Math.PI)
+      ctx.fill()
+      
+      // Draw text (initial)
+      const initial = node.name.charAt(0).toUpperCase()
+      ctx.font = `${size * 0.7}px Arial`
+      ctx.fillStyle = "#ffffff"
+      ctx.textAlign = "center"
+      ctx.textBaseline = "middle"
+      ctx.fillText(initial, x, y)
     }
 
     ctx.restore()
@@ -355,6 +371,41 @@ export default function MentorshipGraph({
 
   return (
     <div className="relative w-full h-full" ref={graphContainerRef}>
+      <style jsx global>{`
+        /* Custom scrollbar styles */
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Dark mode scrollbar */
+        .dark .custom-scrollbar::-webkit-scrollbar-track {
+          background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: rgba(255, 255, 255, 0.3);
+        }
+      `}</style>
+      
       {view === 'table' ? (
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -472,10 +523,21 @@ export default function MentorshipGraph({
 
       {/* Node details modal */}
       {selectedNode && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-2xl mx-4 overflow-hidden">
+        <div 
+          className="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedNode(null)}  // Close modal when clicking on the backdrop
+        >
+          <div 
+            className="bg-white dark:bg-black rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}  // Prevent clicks inside the modal from closing it
+          >
             {/* Header */}
-            <div className="relative p-6 bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700">
+            <div className={`relative p-6 bg-gradient-to-r ${
+              selectedNode.type === "mentor" 
+                ? "from-blue-600 to-blue-800 dark:from-blue-700 dark:to-blue-900" 
+                : "from-green-600 to-green-800 dark:from-green-700 dark:to-green-900"
+              }`}
+            >
               <button
                 onClick={() => setSelectedNode(null)}
                 className="absolute right-4 top-4 p-1 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
@@ -490,10 +552,30 @@ export default function MentorshipGraph({
                     src={selectedNode.picture}
                     alt={selectedNode.name}
                     className="w-20 h-20 rounded-full border-4 border-white/20 object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      // If image fails to load, hide it and show initial instead
+                      target.style.display = 'none';
+                      target.nextElementSibling?.classList.remove('hidden');
+                    }}
                   />
                 ) : (
-                  <div className="w-20 h-20 rounded-full bg-white/20 flex items-center justify-center text-2xl font-bold text-white">
-                    {selectedNode.name.charAt(0)}
+                  <div className={`w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold text-white ${
+                    selectedNode.type === "mentor" 
+                      ? "bg-blue-500 dark:bg-blue-600" 
+                      : "bg-green-500 dark:bg-green-600"
+                  }`}>
+                    {selectedNode.name.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                {/* Hidden fallback element that will be shown if image fails to load */}
+                {selectedNode.picture && (
+                  <div className={`w-20 h-20 rounded-full hidden flex items-center justify-center text-2xl font-bold text-white ${
+                    selectedNode.type === "mentor" 
+                      ? "bg-blue-500 dark:bg-blue-600" 
+                      : "bg-green-500 dark:bg-green-600"
+                  }`}>
+                    {selectedNode.name.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div>
@@ -506,10 +588,10 @@ export default function MentorshipGraph({
             </div>
 
             {/* Content */}
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
               {/* University */}
               {selectedNode.university && (
-                <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="py-3 border-b border-gray-200 dark:border-gray-800">
                   <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">University</h4>
                   <p className="text-gray-900 dark:text-white">{selectedNode.university}</p>
                 </div>
@@ -517,29 +599,29 @@ export default function MentorshipGraph({
 
               {/* Contact Info - Only visible for Admin */}
               {isAdmin && (
-                <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+                <div className="py-3 border-b border-gray-200 dark:border-gray-800">
                   <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Contact Information</h4>
                   {selectedNode.email && (
                     <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300 mb-2">
                       <Mail size={18} />
-                      <a href={`mailto:${selectedNode.email}`} className="hover:text-blue-500">{selectedNode.email}</a>
+                      <a href={`mailto:${selectedNode.email}`} className="hover:text-primary">{selectedNode.email}</a>
                     </div>
                   )}
                   {selectedNode.phone && (
                     <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
                       <Phone size={18} />
-                      <a href={`tel:${selectedNode.phone}`} className="hover:text-blue-500">{selectedNode.phone}</a>
+                      <a href={`tel:${selectedNode.phone}`} className="hover:text-primary">{selectedNode.phone}</a>
                     </div>
                   )}
                 </div>
               )}
 
               {/* Mentor/Mentees Section */}
-              <div className="py-3 border-b border-gray-200 dark:border-gray-700">
+              <div className="py-3 border-b border-gray-200 dark:border-gray-800">
                 <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">
                   {selectedNode.type === "mentor" ? "Mentees" : "Mentor"}
                 </h4>
-                <div className="space-y-3">
+                <div className="space-y-3 max-h-[30vh] overflow-y-auto custom-scrollbar pr-2">
                   {selectedNode.type === "mentor" ? (
                     // Show mentees for a mentor
                     mentees
@@ -555,9 +637,41 @@ export default function MentorshipGraph({
                         return mentorValue?.toString() === menteeNodeId;
                       })
                       .map((mentee) => (
-                        <div key={mentee._id.toString()} className="flex items-center gap-3">
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={mentee.picture || '/avatar.svg'} alt={mentee.name} className="w-8 h-8 rounded-full object-cover" />
+                        <div key={mentee._id.toString()} className="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg">
+                          {mentee.picture ? (
+                            /* eslint-disable-next-line @next/next/no-img-element */
+                            <img 
+                              src={mentee.picture || '/avatar.svg'} 
+                              alt={mentee.name}
+                              className="w-8 h-8 rounded-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null; // Prevent infinite loop
+                                target.src = ''; // Clear the broken image
+                                target.classList.add('bg-green-500', 'dark:bg-green-600', 'flex', 'items-center', 'justify-center');
+                                // Add initial inside the img element
+                                target.style.display = 'flex';
+                                target.style.alignItems = 'center';
+                                target.style.justifyContent = 'center';
+                                target.setAttribute('data-initial', mentee.name.charAt(0).toUpperCase());
+                                target.setAttribute('role', 'presentation');
+                                // Use a pseudo-element to show the initial
+                                const style = document.createElement('style');
+                                style.innerHTML = `
+                                  [data-initial]::before {
+                                    content: attr(data-initial);
+                                    color: white;
+                                    font-weight: bold;
+                                  }
+                                `;
+                                document.head.appendChild(style);
+                              }}
+                            />
+                          ) : (
+                            <div className="w-8 h-8 rounded-full bg-green-500 dark:bg-green-600 flex items-center justify-center text-xs font-bold text-white">
+                              {mentee.name.charAt(0).toUpperCase()}
+                            </div>
+                          )}
                           <div>
                             <div className="font-medium text-gray-900 dark:text-white">{mentee.name}</div>
                             <div className="text-sm text-gray-500 dark:text-gray-400">{mentee.university}</div>
@@ -580,13 +694,31 @@ export default function MentorshipGraph({
                       if (typeof mentorValue === 'object' && mentorValue && '_id' in mentorValue) {
                         console.log("Found mentor as object:", mentorValue);
                         return (
-                          <div className="flex items-center gap-3">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img 
-                              src={mentorValue.picture || '/avatar.svg'} 
-                              alt={mentorValue.name} 
-                              className="w-8 h-8 rounded-full object-cover" 
-                            />
+                          <div className="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg">
+                            {mentorValue.picture ? (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img 
+                                src={mentorValue.picture || '/avatar.svg'} 
+                                alt={mentorValue.name} 
+                                className="w-8 h-8 rounded-full object-cover"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.onerror = null; // Prevent infinite loop
+                                  target.src = ''; // Clear the broken image
+                                  target.classList.add('bg-blue-500', 'dark:bg-blue-600', 'flex', 'items-center', 'justify-center');
+                                  // Add initial inside the img element
+                                  target.style.display = 'flex';
+                                  target.style.alignItems = 'center';
+                                  target.style.justifyContent = 'center';
+                                  target.setAttribute('data-initial', mentorValue.name.charAt(0).toUpperCase());
+                                  target.setAttribute('role', 'presentation');
+                                }}
+                              />
+                            ) : (
+                              <div className="w-8 h-8 rounded-full bg-blue-500 dark:bg-blue-600 flex items-center justify-center text-xs font-bold text-white">
+                                {mentorValue.name.charAt(0).toUpperCase()}
+                              </div>
+                            )}
                             <div>
                               <div className="font-medium text-gray-900 dark:text-white">{mentorValue.name}</div>
                               <div className="text-sm text-gray-500 dark:text-gray-400">{mentorValue.university}</div>
@@ -611,13 +743,31 @@ export default function MentorshipGraph({
                         if (matchingMentor) {
                           console.log("Found matching mentor:", matchingMentor);
                           return (
-                            <div className="flex items-center gap-3">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img 
-                                src={matchingMentor.picture || '/avatar.svg'} 
-                                alt={matchingMentor.name} 
-                                className="w-8 h-8 rounded-full object-cover" 
-                              />
+                            <div className="flex items-center gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-900 rounded-lg">
+                              {matchingMentor.picture ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img 
+                                  src={matchingMentor.picture || '/avatar.svg'} 
+                                  alt={matchingMentor.name} 
+                                  className="w-8 h-8 rounded-full object-cover"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.onerror = null; // Prevent infinite loop
+                                    target.src = ''; // Clear the broken image
+                                    target.classList.add('bg-blue-500', 'dark:bg-blue-600', 'flex', 'items-center', 'justify-center');
+                                    // Add initial inside the img element
+                                    target.style.display = 'flex';
+                                    target.style.alignItems = 'center';
+                                    target.style.justifyContent = 'center';
+                                    target.setAttribute('data-initial', matchingMentor.name.charAt(0).toUpperCase());
+                                    target.setAttribute('role', 'presentation');
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-blue-500 dark:bg-blue-600 flex items-center justify-center text-xs font-bold text-white">
+                                  {matchingMentor.name.charAt(0).toUpperCase()}
+                                </div>
+                              )}
                               <div>
                                 <div className="font-medium text-gray-900 dark:text-white">{matchingMentor.name}</div>
                                 <div className="text-sm text-gray-500 dark:text-gray-400">{matchingMentor.university}</div>
@@ -649,7 +799,7 @@ export default function MentorshipGraph({
               </div>
 
               {/* Social Links */}
-              <div className="py-3 border-t border-gray-200 dark:border-gray-700">
+              <div className="py-3 border-t border-gray-200 dark:border-gray-800">
                 <h4 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-3">Social Profiles</h4>
                 <div className="flex gap-3">
                   {selectedNode.linkedin && (
@@ -657,9 +807,14 @@ export default function MentorshipGraph({
                       href={selectedNode.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      className="p-2 rounded-lg bg-white hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 transition-colors"
                     >
-                      <Linkedin size={20} />
+                      <NextImage
+                        src="/linkedin.png"
+                        alt="LinkedIn"
+                        width={20}
+                        height={20}
+                      />
                     </a>
                   )}
                   {selectedNode.github && (
@@ -667,7 +822,7 @@ export default function MentorshipGraph({
                       href={selectedNode.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      className="p-2 rounded-lg bg-white hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 transition-colors"
                     >
                       <Github size={20} />
                     </a>
@@ -677,9 +832,14 @@ export default function MentorshipGraph({
                       href={selectedNode.leetcode}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                      className="p-2 rounded-lg bg-white hover:bg-gray-50 dark:bg-gray-900 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800 transition-colors"
                     >
-                      <Code size={20} />
+                      <NextImage
+                        src="/leetcode.png"
+                        alt="LeetCode"
+                        width={20}
+                        height={20}
+                      />
                     </a>
                   )}
                 </div>

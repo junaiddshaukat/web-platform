@@ -7,7 +7,7 @@ export async function GET() {
     await connectDB();
     const ambassadors = await Ambassador.find()
       .sort({ createdAt: -1 })
-      .select('name university bio image linkedin'); // Only select public fields
+      .select('name university bio image linkedin leetcode'); // Only select public fields
     
     return NextResponse.json(ambassadors);
   } catch (error) {
