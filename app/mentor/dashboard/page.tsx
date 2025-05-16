@@ -53,8 +53,7 @@ export default function MentorDashboard() {
 
   const handleLogout = async () => {
     try {
-      // Clear the cookie
-      document.cookie = 'mentor-token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      await fetch('/api/mentor/logout', { method: 'POST' });
       router.push('/mentor');
     } catch (err) {
       console.error('Logout error:', err);

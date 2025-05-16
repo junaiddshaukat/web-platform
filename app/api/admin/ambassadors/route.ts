@@ -35,6 +35,7 @@ export async function POST(request: Request) {
   try {
     await connectDB();
     const data = await request.json();
+    console.log('POST /api/admin/ambassadors received data:', data);
 
     // Get admin username from JWT
     const cookieStore: ReadonlyRequestCookies = await cookies();
@@ -63,6 +64,7 @@ export async function POST(request: Request) {
     });
 
     await ambassador.save();
+    console.log('POST /api/admin/ambassadors saved ambassador:', ambassador);
     await ActivityLog.create({
       entityType: 'Ambassador',
       entityId: ambassador._id.toString(),
@@ -94,6 +96,7 @@ export async function PUT(request: Request) {
     }
 
     const data = await request.json();
+    console.log('PUT /api/admin/ambassadors received data:', data);
     // Get admin username from JWT
     const cookieStore: ReadonlyRequestCookies = await cookies();
     const token = cookieStore.get('admin-token')?.value;
@@ -109,6 +112,7 @@ export async function PUT(request: Request) {
       { ...data, lastModifiedBy: adminUsername },
       { new: true }
     );
+    console.log('PUT /api/admin/ambassadors updated ambassador:', ambassador);
 
     if (!ambassador) {
       return NextResponse.json(

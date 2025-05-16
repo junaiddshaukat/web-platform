@@ -2,11 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Eye, EyeOff } from 'lucide-react';
 
 export default function AdminCodePage() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,14 +58,23 @@ export default function AdminCodePage() {
             <label htmlFor="code" className="block text-sm font-medium">
               Admin Code
             </label>
-            <input
-              id="code"
-              type="password"
-              value={code}
-              onChange={(e) => setCode(e.target.value)}
-              className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2"
-              required
-            />
+            <div className="relative">
+              <input
+                id="code"
+                type={showPassword ? "text" : "password"}
+                value={code}
+                onChange={(e) => setCode(e.target.value)}
+                className="mt-1 block w-full rounded-md border border-input bg-background px-3 py-2 pr-10"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
 
           <button

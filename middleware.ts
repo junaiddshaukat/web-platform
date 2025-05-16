@@ -7,6 +7,7 @@ export async function middleware(request: NextRequest) {
   const token = request.cookies.get('admin-token')?.value;
   const adminCodeVerified = request.cookies.get('admin-code-verified')?.value;
   const mentorToken = request.cookies.get('mentor-token')?.value;
+  const mentorAccessVerified = request.cookies.get('mentor-access-verified')?.value;
 
   // Allow access to admin code verification page
   if (path === '/admin') {
@@ -47,7 +48,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Mentor authentication routes
-  // Allow access to mentor login page
+  // Allow access to mentor access code page
   if (path === '/mentor') {
     if (mentorToken) {
       const isValid = await verifyMentorToken(mentorToken);
@@ -58,8 +59,11 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Protect mentor login page
+  // Mentor login page - only accessible after access code verification
   if (path === '/mentor/login') {
+    if (!mentorAccessVerified) {
+      return NextResponse.redirect(new URL('/mentor', request.url));
+    }
     if (mentorToken) {
       const isValid = await verifyMentorToken(mentorToken);
       if (isValid) {
