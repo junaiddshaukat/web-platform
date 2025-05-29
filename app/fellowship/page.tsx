@@ -72,7 +72,7 @@ export default function FellowshipPage() {
   }, [hasAnimatedStats, hasAnimatedTimeline])
 
   const animateStats = () => {
-    const targets = [30, 12, 1000, 3]
+    const targets = [30, 12, 300, 3]
     const duration = 2000
     const steps = 60
     const increment = duration / steps
@@ -113,8 +113,8 @@ export default function FellowshipPage() {
   const levels = [
     {
       level: 0,
-      title: "JZWS Track",
-      subtitle: "Just Zero to Web Specialist",
+      title: "Begineer Track",
+      subtitle: "All Foundations Covered",
       description: "Perfect for absolute beginners starting their coding journey",
       duration: "3 months",
       intensity: "Beginner Friendly",
@@ -125,11 +125,10 @@ export default function FellowshipPage() {
         "Basic web technologies",
         "Simple algorithms & data structures",
         "First projects portfolio",
-        "Mentorship support",
+        "Mentorship support"
       ],
       icon: <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />,
-      badge: "Most Popular",
-      achievement: "Mentee → Fellow",
+      achievement: "Mentee → Fellow (Bronze)"
     },
     {
       level: 1,
@@ -139,17 +138,16 @@ export default function FellowshipPage() {
       duration: "3 months",
       intensity: "Moderate Pace",
       dsaSessions: "4 Advanced DSA Sessions",
-      engineeringSessions: "4 × 12 Engineering Sessions",
+      engineeringSessions: "12 Engineering Sessions",
       highlights: [
         "Advanced data structures",
         "Complex algorithms",
         "System design basics",
         "Multiple tech stacks",
-        "Interview preparation",
+        "Interview preparation"
       ],
       icon: <TrendingUp className="h-5 w-5 sm:h-6 sm:w-6" />,
-      badge: "Recommended",
-      achievement: "Fellow → Certified Fellow (Bronze)",
+      achievement: "Fellow (Bronze) → Fellow (Silver)"
     },
     {
       level: 2,
@@ -159,39 +157,38 @@ export default function FellowshipPage() {
       duration: "3 months",
       intensity: "Expert Level",
       dsaSessions: "4 Expert DSA Sessions",
-      engineeringSessions: "4 × 12 Engineering Sessions",
+      engineeringSessions: "12 Engineering Sessions",
       highlights: [
         "Complex system architecture",
         "Advanced algorithms & optimization",
         "Leadership & mentoring",
         "Industry project collaboration",
-        "Expert-level certifications",
+        "Expert-level certifications"
       ],
       icon: <Briefcase className="h-5 w-5 sm:h-6 sm:w-6" />,
-      badge: "Elite",
-      achievement: "Certified Fellow (Silver/Gold)",
-    },
+      achievement: "Fellow (Silver) → Fellow (Gold)"
+    }
   ]
 
   const timelineData = [
     {
       week: "Week 1-4",
-      title: "Foundation Building",
-      description: "DSA fundamentals, environment setup, basic projects",
-      milestone: "First Algorithm Implementation",
+      title: "Foundation & Skill Building",
+      description: "Master DSA fundamentals, development environment setup, and start building your first projects",
+      milestone: "Complete Basic Projects & DSA"
     },
     {
       week: "Week 5-8",
-      title: "Skill Development",
-      description: "Advanced DSA, web technologies, system design basics",
-      milestone: "Full-Stack Project Completion",
+      title: "Advanced Development & Open Source",
+      description: "Dive into advanced DSA, system design, and contribute to open source projects like GSoC",
+      milestone: "Open Source Contributions"
     },
     {
       week: "Week 9-12",
-      title: "Mastery & Projects",
-      description: "Complex projects, interview prep, capstone project",
-      milestone: "Industry-Ready Portfolio",
-    },
+      title: "Industry Projects & Remote Jobs",
+      description: "Work on complex projects, prepare for remote job interviews, and build your professional portfolio",
+      milestone: "Remote Job Ready"
+    }
   ]
 
   const grindSessions = [
@@ -199,41 +196,44 @@ export default function FellowshipPage() {
       title: "DSA Grind Sessions",
       icon: <Brain className="h-6 w-6 sm:h-8 sm:w-8" />,
       sessions: "30 Deep Sessions",
-      description: "Intensive data structures and algorithms training",
+      description: "Intensive data structures and algorithms training with 20+ hours of pre-recorded content",
       details: [
         "3 sessions per week",
         "2 hours each session",
-        "Varying difficulty levels",
+        "20+ hours of pre-recorded content",
         "LeetCode practice (100, 200, 300, 400, 1000+)",
-        "MERN stack integration",
-      ],
+        "MERN stack integration"
+      ]
     },
     {
       title: "Engineering Grind Sessions",
       icon: <Code className="h-6 w-6 sm:h-8 sm:w-8" />,
       sessions: "12 Weekend Sessions",
-      description: "Hands-on engineering and project development",
+      description: "Hands-on engineering and project development with 20+ hours of pre-recorded content",
       details: [
         "Every weekend session",
-        "Technology-focused learning",
+        "20+ hours of pre-recorded content",
         "JS, React, Redux, Node.js",
         "Database design & architecture",
         "Microservices & system design",
-      ],
+        "AWS, Docker, Kubernetes",
+        "CI/CD & DevOps practices"
+      ]
     },
     {
       title: "Deep Grind Projects",
       icon: <Layers className="h-6 w-6 sm:h-8 sm:w-8" />,
       sessions: "12 Major Projects",
-      description: "Real-world project development with expert guidance",
+      description: "Real-world project development with expert guidance and 20+ hours of pre-recorded content",
       details: [
         "1 project per weekend",
+        "20+ hours of pre-recorded content",
         "Expert mentor guidance",
         "Industry-standard practices",
         "Portfolio-ready applications",
-        "Deployment & optimization",
-      ],
-    },
+        "Deployment & optimization"
+      ]
+    }
   ]
 
   const techStack = [
@@ -696,9 +696,6 @@ export default function FellowshipPage() {
                       </div>
                       <div className="text-xs sm:text-sm font-bold text-muted-foreground">LEVEL {level.level}</div>
                     </div>
-                    <Badge variant="outline" className="border-primary text-primary text-xs">
-                      {level.badge}
-                    </Badge>
                   </div>
 
                   <CardTitle className="text-xl sm:text-2xl lg:text-3xl font-bold mb-1 sm:mb-2 tracking-tight">
@@ -767,7 +764,7 @@ export default function FellowshipPage() {
               Engineering Grind Sessions
             </h2>
             <p className="text-lg sm:text-xl lg:text-2xl text-primary-foreground/70 max-w-4xl mx-auto leading-relaxed">
-              Master modern technologies with dedicated 2-hour sessions each weekend
+              Master modern technologies with dedicated 2-hour sessions each weekend and 20+ hours of pre-sessions content
             </p>
           </div>
 

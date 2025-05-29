@@ -47,14 +47,14 @@ const testimonials = [
     role: "GSoC @ Chromium",
     quote:
       "Dev Weekends was originally founded to empower students of the University of Education. Today, it has grown into a national initiative, helping underserved students across Pakistan break into international remote job markets and become shining stars in the tech world.\n\nI'm truly proud to be a part of this organization. I have been serving as an instructor for the past two and a half years, and it has been an honor to contribute to its mission. With the guidance of the amazing mentors at Dev Weekends, I was able to crack Google Summer of Code. Today, I'm a well-rounded full-stack software engineer because of their constant support and mentorship. 🙌",
-    image: "/client-3.jpg",
+    image: "/saqlain.jpg",
   },
   {
     name: "M Salman",
     role: "GSoC @ FOSSology",
     quote:
       "I'm super thankful for the Dev Weekends community! The mentorship, mentors, fellow members, resources, and support helped me a lot in cracking GSoC and development journey. Huge thanks to Zeeshan Bhai and the Dev Weekends core team. This community helped me level up my skills and even cracked GSoC and much more! I am excited to see Dev Weekends grow even more in the future, InshAllah. Best wishes and prayers!",
-    image: "/client-3.jpg",
+    image: "/salman.jpg",
   },
   {
     name: "M Shehroz",

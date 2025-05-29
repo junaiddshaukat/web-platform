@@ -11,7 +11,7 @@ const GoogleCalendar: React.FC = () => {
     "https://calendar.google.com/calendar/u/0?cid=YjA1ZmMyMGM2YjE5ZjNlMDBjNTgwMjA5MzZhNzAxODcwMTY2NzNiZTBiZjk3MWE4ZjM3OTgwMmE1M2YwY2U0M0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
 
   return (
-    <Card className="w-full max-w-4xl mx-auto">
+    <Card className="w-full mt-5 max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">Stay Updated with Our Events</CardTitle>
       </CardHeader>
