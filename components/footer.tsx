@@ -82,11 +82,11 @@ export default function Footer() {
                     Mentors
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link href="/ambassadors" className="text-muted-foreground hover:text-primary transition-colors">
                     Ambassadors
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </div>
             <div>

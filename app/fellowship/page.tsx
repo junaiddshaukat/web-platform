@@ -113,17 +113,17 @@ export default function FellowshipPage() {
   const levels = [
     {
       level: 0,
-      title: "Begineer Track",
+      title: "Beginner Track",
       subtitle: "All Foundations Covered",
       description: "Perfect for absolute beginners starting their coding journey",
       duration: "3 months",
       intensity: "Beginner Friendly",
-      dsaSessions: "Basic DSA Foundation",
-      engineeringSessions: "Web Development Basics",
+      dsaSessions: "30 DSA Sessions",
+      engineeringSessions: "12 Engineering Grind Sessions",
       highlights: [
         "Programming fundamentals",
-        "Basic web technologies",
-        "Simple algorithms & data structures",
+        "Web technologies fundamentals",
+        "Data structures & algorithms",
         "First projects portfolio",
         "Mentorship support"
       ],
@@ -137,12 +137,12 @@ export default function FellowshipPage() {
       description: "For developers with some programming experience",
       duration: "3 months",
       intensity: "Moderate Pace",
-      dsaSessions: "4 Advanced DSA Sessions",
-      engineeringSessions: "12 Engineering Sessions",
+      dsaSessions: "30 DSA Sessions",
+      engineeringSessions: "12 Engineering Grind Sessions",
       highlights: [
         "Advanced data structures",
         "Complex algorithms",
-        "System design basics",
+        "System design fundamentals",
         "Multiple tech stacks",
         "Interview preparation"
       ],
@@ -156,8 +156,8 @@ export default function FellowshipPage() {
       description: "Intensive program for experienced developers",
       duration: "3 months",
       intensity: "Expert Level",
-      dsaSessions: "4 Expert DSA Sessions",
-      engineeringSessions: "12 Engineering Sessions",
+      dsaSessions: "30 DSA Sessions",
+      engineeringSessions: "12 Engineering Grind Sessions",
       highlights: [
         "Complex system architecture",
         "Advanced algorithms & optimization",
@@ -174,12 +174,12 @@ export default function FellowshipPage() {
     {
       week: "Week 1-4",
       title: "Foundation & Skill Building",
-      description: "Master DSA fundamentals, development environment setup, and start building your first projects",
-      milestone: "Complete Basic Projects & DSA"
+      description: "Master DSA, development environment setup, and start building your first projects",
+      milestone: "Complete Projects & DSA"
     },
     {
       week: "Week 5-8",
-      title: "Advanced Development & Open Source",
+      title: "Open Source Programs & Projects",
       description: "Dive into advanced DSA, system design, and contribute to open source projects like GSoC",
       milestone: "Open Source Contributions"
     },
@@ -252,9 +252,11 @@ export default function FellowshipPage() {
     "Free Access to Paid Courses",
     "Access to Partner Network",
     "Part of Mentor Network",
-    "Personal Recommendations to Companies",
+    "Recommendations to Companies",
     "Personal Referral to Companies",
     "VIP Access to all Events",
+    "Personalized Mentorship",
+    "Mock Interviews",
   ]
 
   const achievementTags = [

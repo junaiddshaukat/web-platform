@@ -61,7 +61,7 @@ const testimonials = [
     role: "Software Engineer @ Unanime Planet",
     quote:
       "I'm overwhelmed with gratitude for the Dev Weekend community! From guiding me through learning the tech stack to polishing my skills as a full-stack engineer, they've been my rock throughout my journey.\n\nTheir expert guidance and preparation for remote job interviews were invaluable. They helped me navigate the application process, and their support during the different phases of interviews was instrumental in my success.\n\nI struggled with many interviews, facing rejections in behavioral, technical, DSA, and team interviews. But the community's motivation and encouragement kept me going. Their words of affirmation - 'You're almost there, just one step away' - became my mantra.\n\nThanks to Dev Weekend, I've landed my dream job and am now enjoying it. If you're struggling to break into the industry, I highly recommend joining this community. They'll provide you with the guidance, support, and motivation you need to succeed.\n\nThank you, Dev Weekend, for believing in me and helping me achieve my goals!",
-    image: "/client-3.jpg",
+    image: "/shehroz.png",
   },
 ];
 
@@ -78,15 +78,8 @@ const mentors = [
     role: "Lead Engineer | Expert Vetted Upworker",
     skills: ["K8s", "AWS", ".NET"],
     linkedin: "https://www.linkedin.com/in/zeeshanadilbutt/",
-    image: "/m2.png",
+    image: "/zee.png",
   },
-  // {
-  //   name: "Fiaz Ahmad",
-  //   role: "TOP RATED PLUS (Top 3%) @ Upwork ",
-  //   skills: ["CI/CD", "Docker", "Kubernetes"],
-  //   linkedin: "https://www.linkedin.com/in/fiazahmad/",
-  //   image: "/m5.jpeg",
-  // },
   {
     name: "Moeez Ahmad",
     role: "SWE @ Calo",
@@ -100,6 +93,34 @@ const mentors = [
     skills: ["AWS", "Azure", "Serverless"],
     linkedin: "https://www.linkedin.com/in/tanzeel-saleem/",
     image: "/m1.jpg",
+  },
+  {
+    name: "Fiaz Ahmad",
+    role: "TOP RATED PLUS (Top 3%) @ Upwork ",
+    skills: ["CI/CD", "Docker", "Kubernetes"],
+    linkedin: "https://www.linkedin.com/in/fiazahmad/",
+    image: "/m5.jpeg",
+  },
+  {
+    name: "Muhammad Shehroz",
+    role: "Software Engineer @ Unanime Planet",
+    skills: ["k8s", "AWS", "Docker"],
+    linkedin: "https://www.linkedin.com/in/muhammad-shehroze",
+    image: "/shehroz.png",
+  },
+  {
+    name: "Abu Bakar",
+    role: "Software Engineer @ Salla Ecommerce",
+    skills: ["Javascript", "Typescript", "Node"],
+    linkedin: "https://www.linkedin.com/in/iamaboubakar/",
+    image: "/bakar.png",
+  },
+  {
+    name: "Fiaz Ahmad",
+    role: "TOP RATED PLUS (Top 3%) @ Upwork ",
+    skills: ["CI/CD", "Docker", "Kubernetes"],
+    linkedin: "https://www.linkedin.com/in/fiazahmad/",
+    image: "/m5.jpeg",
   },
 ];
 

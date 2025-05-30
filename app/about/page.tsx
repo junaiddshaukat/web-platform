@@ -53,7 +53,7 @@ export default function AboutPage() {
           </p>
         </div>
         <div className="relative h-[400px] rounded-xl overflow-hidden">
-          <Image src="https://res.cloudinary.com/junaidshaukat/image/upload/v1741340636/DW/jujndt7rz9nmyygwv098.jpg" alt="Dev Weekends Meetup" fill className="object-cover" />
+          <Image src="/about.jpg" alt="Dev Weekends Meetup" fill className="object-cover" />
         </div>
       </section>
 
