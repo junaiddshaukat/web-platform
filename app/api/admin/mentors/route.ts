@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server';
-import { Mentor } from '@/models/Mentor';
-import { Mentee } from '@/models/Mentee';
-import { Tag } from '@/models/Tag';
 import connectDB from '@/lib/db';
 import { v2 as cloudinary } from 'cloudinary';
 import { cookies } from 'next/headers';
 import { verify } from 'jsonwebtoken';
 import { ActivityLog } from '@/models/ActivityLog';
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+
+// Import models in correct order to ensure proper registration
+import { Tag } from '@/models/Tag';
+import { Mentor } from '@/models/Mentor';
+import { Mentee } from '@/models/Mentee';
+
+// In-memory cache for admin routes
+const adminCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -28,30 +34,83 @@ export async function GET(request: Request) {
     const id = searchParams.get('id');
     
     if (id) {
+      // For single mentor, check cache first
+      const cacheKey = `admin-mentor-${id}`;
+      const cached = adminCache.get(cacheKey);
+      
+      if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return NextResponse.json(cached.data);
+      }
+
       // Return a single mentor by ID with populated mentees and tags
       const mentor = await Mentor.findById(id)
         .populate('mentees')
-        .populate('tags');
+        .populate('tags')
+        .maxTimeMS(10000); // 10 second timeout
       
       if (!mentor) {
         return NextResponse.json({ error: 'Mentor not found' }, { status: 404 });
       }
+
+      // Cache the result
+      adminCache.set(cacheKey, {
+        data: mentor,
+        timestamp: Date.now()
+      });
       
       return NextResponse.json(mentor);
     } else {
+      // For all mentors, check cache first
+      const cacheKey = 'admin-mentors-all';
+      const cached = adminCache.get(cacheKey);
+      
+      if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return NextResponse.json(cached.data);
+      }
+
       // Return all mentors with populated mentees and tags
       const mentors = await Mentor.find()
         .populate('mentees')
         .populate('tags')
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .maxTimeMS(15000); // 15 second timeout
+
+      // Cache the result
+      adminCache.set(cacheKey, {
+        data: mentors,
+        timestamp: Date.now()
+      });
+
       return NextResponse.json(mentors);
     }
   } catch (error) {
     console.error('Error fetching mentors:', error);
+    
+    // Try to return stale cache if available
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    const cacheKey = id ? `admin-mentor-${id}` : 'admin-mentors-all';
+    const staleCache = adminCache.get(cacheKey);
+    
+    if (staleCache) {
+      return NextResponse.json(staleCache.data);
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to fetch mentors' },
+      { 
+        error: 'Failed to fetch mentors',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
+  }
+}
+
+// Helper function to invalidate relevant caches
+function invalidateAdminMentorCaches(mentorId?: string) {
+  adminCache.delete('admin-mentors-all');
+  if (mentorId) {
+    adminCache.delete(`admin-mentor-${mentorId}`);
   }
 }
 
@@ -103,6 +162,9 @@ export async function POST(request: Request) {
       adminUsername,
       details: { name: mentor.name, email: mentor.email },
     });
+
+    // Invalidate caches after creating new mentor
+    invalidateAdminMentorCaches();
 
     return NextResponse.json(mentor);
   } catch (error) {
@@ -197,6 +259,9 @@ export async function PUT(request: Request) {
       details: { name: mentor.name, email: mentor.email },
     });
 
+    // Invalidate caches after updating mentor
+    invalidateAdminMentorCaches(id);
+
     console.log(`Updated mentor: ${mentor.name}, username: ${mentor.username}`);
     return NextResponse.json(mentor);
   } catch (error) {
@@ -249,11 +314,14 @@ export async function DELETE(request: Request) {
 
     await ActivityLog.create({
       entityType: 'Mentor',
-      entityId: mentor._id.toString(),
+      entityId: id,
       action: 'delete',
       adminUsername,
       details: { name: mentor.name, email: mentor.email },
     });
+
+    // Invalidate caches after deleting mentor
+    invalidateAdminMentorCaches(id);
 
     return NextResponse.json({ message: 'Mentor deleted successfully' });
   } catch (error) {

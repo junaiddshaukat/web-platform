@@ -1,12 +1,21 @@
 import { NextResponse } from 'next/server';
-import { Mentee } from '@/models/Mentee';
-import { Mentor } from '@/models/Mentor';
-import { Tag } from '@/models/Tag';
 import connectDB from '@/lib/db';
 import { v2 as cloudinary } from 'cloudinary';
 import { cookies } from 'next/headers';
 import { verify } from 'jsonwebtoken';
 import { ActivityLog } from '@/models/ActivityLog';
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
+
+// Import models in correct order to ensure proper registration
+import { Tag } from '@/models/Tag';
+import { Mentee } from '@/models/Mentee';
+import { Mentor } from '@/models/Mentor';
+
+// In-memory cache for admin mentees
+const adminMenteesCache = new Map();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // Configure Cloudinary
 cloudinary.config({
@@ -15,7 +24,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// GET all mentees or a single mentee by ID with their mentors
+// GET all mentees or a single mentee by ID with full details (admin view)
 export async function GET(request: Request) {
   try {
     await connectDB();
@@ -25,31 +34,83 @@ export async function GET(request: Request) {
     const id = searchParams.get('id');
     
     if (id) {
+      // For single mentee, check cache first
+      const cacheKey = `admin-mentee-${id}`;
+      const cached = adminMenteesCache.get(cacheKey);
+      
+      if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return NextResponse.json(cached.data);
+      }
+
       // Return a single mentee by ID with populated mentor and tags
       const mentee = await Mentee.findById(id)
         .populate('mentor')
-        .populate('tags');
+        .populate('tags')
+        .maxTimeMS(10000); // 10 second timeout
       
       if (!mentee) {
         return NextResponse.json({ error: 'Mentee not found' }, { status: 404 });
       }
+
+      // Cache the result
+      adminMenteesCache.set(cacheKey, {
+        data: mentee,
+        timestamp: Date.now()
+      });
       
       return NextResponse.json(mentee);
     } else {
-      // Return all mentees with populated mentors and tags
+      // For all mentees, check cache first
+      const cacheKey = 'admin-mentees-all';
+      const cached = adminMenteesCache.get(cacheKey);
+      
+      if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+        return NextResponse.json(cached.data);
+      }
+
+      // Return all mentees with populated mentor and tags
       const mentees = await Mentee.find()
         .populate('mentor')
         .populate('tags')
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .maxTimeMS(15000); // 15 second timeout
+
+      // Cache the result
+      adminMenteesCache.set(cacheKey, {
+        data: mentees,
+        timestamp: Date.now()
+      });
 
       return NextResponse.json(mentees);
     }
   } catch (error) {
     console.error('Error fetching mentees:', error);
+    
+    // Try to return stale cache if available
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+    const cacheKey = id ? `admin-mentee-${id}` : 'admin-mentees-all';
+    const staleCache = adminMenteesCache.get(cacheKey);
+    
+    if (staleCache) {
+      return NextResponse.json(staleCache.data);
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to fetch mentees' },
+      { 
+        error: 'Failed to fetch mentees',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     );
+  }
+}
+
+// Helper function to invalidate relevant caches
+function invalidateAdminMenteesCaches(menteeId?: string) {
+  adminMenteesCache.delete('admin-mentees-all');
+  if (menteeId) {
+    adminMenteesCache.delete(`admin-mentee-${menteeId}`);
   }
 }
 
@@ -118,6 +179,9 @@ export async function POST(request: Request) {
       details: `Added mentee: ${mentee.name}`,
       adminUsername,
     });
+
+    // Invalidate caches after creating new mentee
+    invalidateAdminMenteesCaches();
 
     return NextResponse.json(mentee);
   } catch (error) {
@@ -217,6 +281,9 @@ export async function PUT(request: Request) {
       adminUsername,
     });
 
+    // Invalidate caches after updating mentee
+    invalidateAdminMenteesCaches(id);
+
     return NextResponse.json(mentee);
   } catch (error) {
     console.error('Error updating mentee:', error);
@@ -285,6 +352,9 @@ export async function DELETE(request: Request) {
       details: `Deleted mentee: ${mentee.name}`,
       adminUsername,
     });
+
+    // Invalidate caches after deleting mentee
+    invalidateAdminMenteesCaches(id);
 
     return NextResponse.json({ message: 'Mentee deleted successfully' });
   } catch (error) {
