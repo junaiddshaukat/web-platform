@@ -90,17 +90,16 @@ export default function SessionsPage() {
 
       {/* Search and Filter */}
       <div className="flex flex-col gap-4 mb-6 sm:mb-8">
-        <div className="w-full">
+        <div className="flex w-full gap-2">
           <Input 
             placeholder="Search sessions..." 
             value={search} 
             onChange={e => setSearch(e.target.value)}
-            className="w-full"
+            className="w-1/2"
           />
-        </div>
-        <div className="flex flex-col sm:flex-row gap-2 w-full">
+          <div className="flex-grow"></div>
           <Select value={selectedTopic} onValueChange={setSelectedTopic}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Topic" />
             </SelectTrigger>
             <SelectContent>
@@ -110,7 +109,7 @@ export default function SessionsPage() {
             </SelectContent>
           </Select>
           <Select defaultValue="upcoming">
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Time" />
             </SelectTrigger>
             <SelectContent>
@@ -120,10 +119,6 @@ export default function SessionsPage() {
               <SelectItem value="past">Past Sessions</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" size="icon" className="sm:w-auto w-full">
-            <Filter className="h-4 w-4" />
-            <span className="ml-2 sm:hidden">Filter</span>
-          </Button>
         </div>
       </div>
 
