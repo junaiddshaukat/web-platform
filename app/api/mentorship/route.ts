@@ -7,8 +7,13 @@ import { Mentor } from '@/models/Mentor';
 import { Mentee } from '@/models/Mentee';
 
 // In-memory cache
-const cache = new Map();
+export const cache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
+
+// Export function to clear cache
+export function clearMentorshipCache() {
+  cache.clear();
+}
 
 export async function GET() {
   try {

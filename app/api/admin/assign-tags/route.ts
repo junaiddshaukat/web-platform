@@ -7,7 +7,28 @@ import { cookies } from 'next/headers';
 import { verify } from 'jsonwebtoken';
 import { ActivityLog } from '@/models/ActivityLog';
 
+// Import cache invalidation functions
+import { clearMentorshipCache } from '@/app/api/mentorship/route';
+import { clearAdminMentorCache } from '@/app/api/admin/mentors/route';
+import { clearAdminMenteeCache } from '@/app/api/admin/mentees/route';
+import { clearPublicMentorCache } from '@/app/api/mentors/route';
+import { clearPublicMenteeCache } from '@/app/api/mentees/route';
+
 const JWT_SECRET = process.env.JWT_SECRET;
+
+// Function to clear all related caches
+function invalidateAllCaches() {
+  try {
+    clearMentorshipCache();
+    clearAdminMentorCache();
+    clearAdminMenteeCache();
+    clearPublicMentorCache();
+    clearPublicMenteeCache();
+  } catch (error) {
+    // If cache clearing fails, log it but don't break the operation
+    console.error('Failed to clear some caches:', error);
+  }
+}
 
 // Middleware to check admin authentication
 async function checkAdmin() {
@@ -58,49 +79,58 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate tag IDs exist
-    const validTags = await Tag.find({ _id: { $in: tagIds } });
-    if (validTags.length !== tagIds.length) {
-      return NextResponse.json(
-        { error: 'One or more tag IDs are invalid' },
-        { status: 400 }
-      );
+    // Validate tag IDs exist (only if tagIds is not empty)
+    if (tagIds.length > 0) {
+      const validTags = await Tag.find({ _id: { $in: tagIds } });
+      if (validTags.length !== tagIds.length) {
+        return NextResponse.json(
+          { error: 'One or more tag IDs are invalid' },
+          { status: 400 }
+        );
+      }
     }
 
     let updatedPerson;
     let personName = '';
 
     if (personType === 'mentor') {
+      // First get the current mentor to track changes
+      const currentMentor = await Mentor.findById(personId);
+      if (!currentMentor) {
+        return NextResponse.json(
+          { error: 'Mentor not found' },
+          { status: 404 }
+        );
+      }
+
       updatedPerson = await Mentor.findByIdAndUpdate(
         personId,
         { tags: tagIds },
         { new: true }
       ).populate('tags');
       
-      if (!updatedPerson) {
+      personName = updatedPerson.name;
+    } else {
+      // First get the current mentee to track changes
+      const currentMentee = await Mentee.findById(personId);
+      if (!currentMentee) {
         return NextResponse.json(
-          { error: 'Mentor not found' },
+          { error: 'Mentee not found' },
           { status: 404 }
         );
       }
-      
-      personName = updatedPerson.name;
-    } else {
+
       updatedPerson = await Mentee.findByIdAndUpdate(
         personId,
         { tags: tagIds },
         { new: true }
       ).populate('tags');
       
-      if (!updatedPerson) {
-        return NextResponse.json(
-          { error: 'Mentee not found' },
-          { status: 404 }
-        );
-      }
-      
       personName = updatedPerson.name;
     }
+
+    // Clear all caches after successful tag update
+    invalidateAllCaches();
 
     // Log activity
     await ActivityLog.create({

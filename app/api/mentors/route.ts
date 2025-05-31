@@ -6,7 +6,7 @@ import { Tag } from '@/models/Tag';
 import { Mentor } from '@/models/Mentor';
 
 // In-memory cache for public mentors
-const publicMentorsCache = new Map();
+export const publicMentorsCache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 // GET all mentors with their mentees (public view)
@@ -72,4 +72,9 @@ export async function GET() {
       { status: 500 }
     );
   }
+}
+
+// Export function to clear public mentor cache
+export function clearPublicMentorCache() {
+  publicMentorsCache.clear();
 } 

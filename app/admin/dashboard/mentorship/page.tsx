@@ -46,7 +46,7 @@ const VIEW_OPTIONS = [
   { key: "gallery", label: "Gallery", icon: Grid },
 ];
 
-function TableView({ mentors, mentees, onDataUpdate }: any) {
+function TableView({ mentors, mentees, onDataUpdate, handleTagsUpdated }: any) {
   const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
   const router = useRouter();
 
@@ -62,10 +62,6 @@ function TableView({ mentors, mentees, onDataUpdate }: any) {
 
   const handleSetCredentials = (mentorId: string) => {
     router.push(`/admin/dashboard/mentor-credentials/${mentorId}`);
-  };
-
-  const handleTagsUpdated = (personId: string, personType: 'mentor' | 'mentee', updatedTags: any[]) => {
-    onDataUpdate && onDataUpdate();
   };
 
   return (
@@ -1126,29 +1122,74 @@ export default function AdminMentorshipPage() {
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState("spider");
 
+  const fetchData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [mentorsRes, menteesRes] = await Promise.all([
+        fetch("/api/admin/mentors"),
+        fetch("/api/admin/mentees"),
+      ]);
+      if (!mentorsRes.ok || !menteesRes.ok)
+        throw new Error("Failed to fetch data");
+      const [mentors, mentees] = await Promise.all([
+        mentorsRes.json(),
+        menteesRes.json(),
+      ]);
+      setData({ mentors, mentees });
+      setFilteredData({ mentors, mentees });
+    } catch (err) {
+      setError("Failed to load mentorship data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleTagsUpdated = (personId: string, personType: 'mentor' | 'mentee', updatedTags: any[]) => {
+    // Update local state immediately for instant UI feedback
+    if (personType === 'mentor') {
+      setData(prevData => ({
+        ...prevData,
+        mentors: prevData.mentors.map(mentor => 
+          mentor._id === personId 
+            ? { ...mentor, tags: updatedTags }
+            : mentor
+        )
+      }));
+      
+      setFilteredData(prevData => ({
+        ...prevData,
+        mentors: prevData.mentors.map(mentor => 
+          mentor._id === personId 
+            ? { ...mentor, tags: updatedTags }
+            : mentor
+        )
+      }));
+    } else {
+      setData(prevData => ({
+        ...prevData,
+        mentees: prevData.mentees.map(mentee => 
+          mentee._id === personId 
+            ? { ...mentee, tags: updatedTags }
+            : mentee
+        )
+      }));
+      
+      setFilteredData(prevData => ({
+        ...prevData,
+        mentees: prevData.mentees.map(mentee => 
+          mentee._id === personId 
+            ? { ...mentee, tags: updatedTags }
+            : mentee
+        )
+      }));
+    }
+    
+    // Cache invalidation in the API ensures fresh data on next request
+    // No need to refresh immediately - local state update is sufficient
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const [mentorsRes, menteesRes] = await Promise.all([
-          fetch("/api/admin/mentors"),
-          fetch("/api/admin/mentees"),
-        ]);
-        if (!mentorsRes.ok || !menteesRes.ok)
-          throw new Error("Failed to fetch data");
-        const [mentors, mentees] = await Promise.all([
-          mentorsRes.json(),
-          menteesRes.json(),
-        ]);
-        setData({ mentors, mentees });
-        setFilteredData({ mentors, mentees });
-      } catch (err) {
-        setError("Failed to load mentorship data.");
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchData();
   }, []);
 
@@ -1316,7 +1357,8 @@ export default function AdminMentorshipPage() {
           <TableView
             mentors={filteredData.mentors}
             mentees={filteredData.mentees}
-            onDataUpdate={() => handleSearch({ searchTerm: "", role: "all", university: "", mentorName: "" })}
+            onDataUpdate={fetchData}
+            handleTagsUpdated={handleTagsUpdated}
           />
         );
       case "gallery":

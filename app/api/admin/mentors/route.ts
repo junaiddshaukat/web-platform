@@ -12,7 +12,7 @@ import { Mentor } from '@/models/Mentor';
 import { Mentee } from '@/models/Mentee';
 
 // In-memory cache for admin routes
-const adminCache = new Map();
+export const adminCache = new Map();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -331,4 +331,9 @@ export async function DELETE(request: Request) {
       { status: 500 }
     );
   }
+}
+
+// Export function to clear admin mentor cache
+export function clearAdminMentorCache() {
+  adminCache.clear();
 } 
