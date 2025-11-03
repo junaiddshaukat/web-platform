@@ -1,8 +1,12 @@
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { FileText, Video, BookOpen, Download, ExternalLink } from "lucide-react"
+import { FileText, Video, BookOpen, Download, ExternalLink, LinkIcon } from "lucide-react"
+import ResourcesFeed from "@/components/resources-feed"
+
+export const dynamic = 'force-dynamic'
 
 export default function ResourcesPage() {
   return (
@@ -14,13 +18,18 @@ export default function ResourcesPage() {
         </p>
       </div>
 
-      <Tabs defaultValue="guides" className="w-full">
+      <Tabs defaultValue="interview" className="w-full">
         <TabsList className="mb-6">
           <TabsTrigger value="guides">Guides & Tutorials</TabsTrigger>
           <TabsTrigger value="videos">Video Content</TabsTrigger>
           <TabsTrigger value="books">Books & Reading</TabsTrigger>
           <TabsTrigger value="tools">Tools & Templates</TabsTrigger>
+          <TabsTrigger value="interview">Interview Prep</TabsTrigger>
         </TabsList>
+
+        <TabsContent value="interview" className="space-y-10">
+          <ResourcesFeed />
+        </TabsContent>
 
         <TabsContent value="guides" className="space-y-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

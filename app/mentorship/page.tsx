@@ -78,7 +78,7 @@ export default function MentorshipPage() {
   }, [hasAnimatedStats, hasAnimatedTimeline])
 
   const animateStats = () => {
-    const targets = [20, 24, 400, 6]
+    const targets = [20, 24, 400, 4]
     const duration = 2000
     const steps = 60
     const increment = duration / steps
@@ -121,7 +121,7 @@ export default function MentorshipPage() {
       title: "Foundation Track",
       subtitle: "Complete Beginner Journey",
       description: "Perfect for absolute beginners starting their coding journey with comprehensive support",
-      duration: "6 months",
+      duration: "4 months",
       intensity: "Beginner Friendly",
       liveSessions: "20 Live Sessions",
       mentorshipHours: "24 Hours 1:1 Mentorship",
@@ -141,7 +141,7 @@ export default function MentorshipPage() {
       title: "Professional Track",
       subtitle: "Industry-Ready Development",
       description: "For engineers with basic knowledge aiming for professional excellence",
-      duration: "6 months",
+      duration: "4 months",
       intensity: "Moderate Pace",
       liveSessions: "20 Live Sessions",
       highlights: [
@@ -160,7 +160,7 @@ export default function MentorshipPage() {
       title: "Expert Track",
       subtitle: "Leadership & Architecture",
       description: "Intensive program for experienced engineers targeting senior roles",
-      duration: "6 months",
+      duration: "4 months",
       intensity: "Expert Level",
       liveSessions: "20 Live Sessions",
     
@@ -191,13 +191,6 @@ export default function MentorshipPage() {
       description: "Deep dive into DSA, system design, and development practices with personalized mentorship",
       milestone: "Build Portfolio Projects",
       features: ["8 Live Sessions/month", "4 Mentor Sessions", "3 Projects"]
-    },
-    {
-      month: "Month 5-6",
-      title: "Industry Readiness & Placement",
-      description: "Real-world projects, interview preparation, and job placement support with mentor advocacy",
-      milestone: "Job Ready & Certified",
-      features: ["8 Live Sessions/month", "6 Mentor Sessions", "Capstone Project"]
     }
   ]
 
@@ -370,7 +363,7 @@ export default function MentorshipPage() {
               <X className="w-5 h-5" />
             </Button>
             <CardHeader>
-              <CardTitle>6-Month Mentorship Program</CardTitle>
+              <CardTitle>4-Month Mentorship Program</CardTitle>
               <CardDescription>
                 <span className="font-semibold text-green-600">100% Free - No hidden costs!</span>
               </CardDescription>
@@ -411,7 +404,7 @@ export default function MentorshipPage() {
                 className="mb-6 sm:mb-8 border-primary text-primary px-3 sm:px-4 py-1 sm:py-2 rounded-full font-medium text-xs sm:text-sm"
               >
                 <Star className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                2025 Cohort - 6-Month Mentorship Program
+                2025 Cohort - 4-Month Mentorship Program
               </Badge>
 
               <h1 className="text-5xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-4 sm:mb-8 leading-[1.1] sm:leading-[0.9] tracking-tight">
@@ -424,7 +417,7 @@ export default function MentorshipPage() {
                 </span>
               </h1>
               <p className="text-sm sm:text-xl lg:text-2xl text-muted-foreground mb-6 sm:mb-8 max-w-4xl mx-auto leading-relaxed px-4">
-                <strong>6-month comprehensive mentorship program with live sessions</strong>
+                <strong>4-month comprehensive mentorship program with live sessions</strong>
                 <br className="hidden sm:block" />
                 Get personal mentorship, attend live coding sessions, and become job-ready with our industry-focused curriculum.
               </p>
@@ -560,7 +553,7 @@ export default function MentorshipPage() {
                 Program Timeline
               </Badge>
               <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 tracking-tight">
-                Your 6-Month Transformation
+                Your 4-Month Transformation
               </h2>
               <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-4xl mx-auto leading-relaxed">
                 A structured journey from beginner to industry-ready engineer with continuous mentorship

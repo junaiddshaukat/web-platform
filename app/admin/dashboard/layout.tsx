@@ -15,6 +15,7 @@ const menuItems = [
   { title: 'Network', href: '/admin/dashboard/add-mentorship', icon: <Globe className="w-5 h-5" /> },
   { title: 'Tags', href: '/admin/dashboard/tags', icon: <Tag className="w-5 h-5" /> },
   { title: 'MindMaster', href: '/admin/dashboard/mindmaster', icon: <BookOpen className="w-5 h-5" /> },
+  { title: 'Resources', href: '/admin/dashboard/resources', icon: <BookOpen className="w-5 h-5" /> },
 ];
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {

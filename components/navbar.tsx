@@ -17,6 +17,7 @@ export default function Navbar() {
     { href: "/fellowship", label: "Fellowship" },
     { href: "/sessions", label: "Sessions" },
     { href: "/mindmaster", label: "MindMaster" },
+    { href: "/resources", label: "Resources" },
   ];
 
   const isActive = (path: string) => pathname === path;

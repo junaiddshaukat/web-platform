@@ -10,17 +10,38 @@ import { usePathname } from "next/navigation"
 export function SocialModal() {
   const [showModal, setShowModal] = useState(false)
   const pathname = usePathname()
+  const STORAGE_KEY = 'dw-community-modal-dismissed-at'
+  const SUPPRESS_MS = 2 * 24 * 60 * 60 * 1000 // 2 days
 
   useEffect(() => {
     if (pathname === '/mentorship') {
       return
     }
     const timer = setTimeout(() => {
+      try {
+        const last = typeof window !== 'undefined' ? window.localStorage.getItem(STORAGE_KEY) : null
+        if (last) {
+          const lastTs = parseInt(last, 10)
+          if (!Number.isNaN(lastTs) && Date.now() - lastTs < SUPPRESS_MS) {
+            setShowModal(false)
+            return
+          }
+        }
+      } catch {}
       setShowModal(true)
     }, 300)
 
     return () => clearTimeout(timer)
   }, [pathname])
+
+  const handleClose = () => {
+    try {
+      if (typeof window !== 'undefined') {
+        window.localStorage.setItem(STORAGE_KEY, Date.now().toString())
+      }
+    } catch {}
+    setShowModal(false)
+  }
 
   const socialLinks = [
     {
@@ -67,13 +88,13 @@ export function SocialModal() {
     <div className="fixed inset-0 z-50 flex items-center justify-center animate-fadeIn">
       <div
         className="absolute inset-0 bg-black/30 backdrop-blur-sm transition-all duration-300"
-        onClick={() => setShowModal(false)}
+        onClick={handleClose}
       />
       <Card className="max-w-md w-full relative z-10 animate-modalIn mx-4">
         <Button 
           variant="ghost" 
           size="icon" 
-          onClick={() => setShowModal(false)} 
+          onClick={handleClose} 
           className="absolute top-4 right-4 hover:bg-muted"
         >
           <X className="w-4 h-4" />
