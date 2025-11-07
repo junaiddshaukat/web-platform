@@ -49,7 +49,7 @@ const stats = [
     label: "Placement Impact",
     target: 92,
     suffix: "%",
-    blurb: "Average placement success in partner campuses",
+    blurb: "Average placement success across partner campuses",
     icon: Trophy,
   },
 ]
@@ -60,7 +60,7 @@ const benefits = [
     description:
       "Unlock everything Dev Weekends Certified Fellows enjoy — from masterclasses to private grind sessions — while you lead the charge on campus.",
     points: [
-      "Free access to expert training & paid courses",
+      "Free access to expert training and paid courses",
       "Dedicated mentorship pods and AMA sessions",
       "Priority seats in Fellowship grind cohorts",
     ],
@@ -71,38 +71,38 @@ const benefits = [
     description:
       "Turn campus momentum into real opportunities with referrals, interview prep, and data-backed success playbooks tailored by the core team.",
     points: [
-      "Recommendations & personal referrals to companies",
+      "Recommendations and personal referrals to companies",
       "Mock interviews and career sprint reviews",
       "Outcome-oriented OKRs and reporting support",
     ],
     icon: Award,
   },
   {
-    title: "Community Leadership & Swag",
+    title: "Community Leadership and Swag",
     description:
       "Deliver unforgettable experiences while earning recognition, spotlight features, and limited-edition ambassador goodies.",
     points: [
       "VIP access to all Dev Weekends events",
-      "Ambassador swag kit: hoodie, stickers, desk gear",
-      "Monthly spotlight across Dev Weekends channels",
+      "Ambassador swag kit: hoodie, stickers, and desk gear",
+      "Monthly spotlights across Dev Weekends channels",
     ],
     icon: Gift,
   },
 ]
 
 const ambassadorPerks = [
-  "Free Access to Expert Training",
-  "Free Access to Paid Courses",
-  "Access to Partner Network",
-  "Part of Mentor Network",
-  "Recommendations to Companies",
-  "Personal Referral to Companies",
-  "VIP Access to all Events",
-  "Personalized Mentorship",
-  "Mock Interviews & Career Sprints",
+  "Free access to expert training",
+  "Complimentary access to paid courses",
+  "Direct entry into the partner network",
+  "Membership in the mentor network",
+  "Company recommendations from industry leaders",
+  "Personal referrals to hiring partners",
+  "VIP access to all Dev Weekends events",
+  "Personalized mentorship and career roadmaps",
+  "Mock interviews and structured career sprints",
   "Limited-edition Dev Weekends ambassador swag drops",
   "Seasonal goodies for top-performing ambassadors",
-  "Spotlight features & recommendation letters from Dev Weekends leadership",
+  "Spotlight features and recommendation letters from Dev Weekends leadership",
 ]
 
 const responsibilities = [
@@ -122,18 +122,18 @@ const responsibilities = [
     description:
       "Bridge students with mentors, recruiters, and partner startups while advocating for the right learning pathways.",
     items: [
-      "Coordinate mentor AMA and placement clinics",
+      "Coordinate mentor AMAs and placement clinics",
       "Nominate standout students for scholarships",
-      "Manage campus ambassador task board and KPIs",
+      "Manage the campus ambassador task board and KPIs",
     ],
     icon: Target,
   },
   {
-    title: "Champion The Brand",
+    title: "Champion the Brand",
     description:
       "Tell compelling stories, showcase community wins, and amplify Dev Weekends impact across your campus networks.",
     items: [
-      "Curate monthly highlight recap",
+      "Curate a monthly highlight recap",
       "Collaborate on reels, blogs, and newsletter features",
       "Drive social media growth with authentic narratives",
     ],
@@ -173,12 +173,12 @@ const support = [
   {
     title: "Monthly Strategy Labs",
     description:
-      "Live sync-ups with Dev Weekends core team to review KPIs, unlock blockers, and double down on what works.",
+      "Live sync-ups with the Dev Weekends core team to review KPIs, unlock blockers, and double down on what works.",
   },
   {
     title: "Always-On Support Desk",
     description:
-      "Slack channel with mentors, designers, and marketing coaches ready to co-create your next campus breakthrough.",
+      "A Slack channel with mentors, designers, and marketing coaches ready to co-create your next campus breakthrough.",
   },
 ]
 
@@ -187,13 +187,13 @@ const journey = [
     phase: "Discover",
     timeline: "Week 1",
     focus: "Ambassador onboarding",
-    description: "Kick off with leadership bootcamp, campus audit, and OKR mapping led by the core team.",
+    description: "Kick off with a leadership bootcamp, a campus audit, and OKR mapping led by the core team.",
   },
   {
     phase: "Launch",
     timeline: "Month 1",
     focus: "First flagship event",
-    description: "Deliver your campus debut with full-stack collateral, marketing calendar, and mentorship support.",
+    description: "Deliver your campus debut with full-stack collateral, a marketing calendar, and mentorship support.",
   },
   {
     phase: "Grow",
@@ -205,7 +205,7 @@ const journey = [
     phase: "Elevate",
     timeline: "Month 4+",
     focus: "Career outcomes",
-    description: "Connect students with recruiters, publish success stories, and unlock stipend + leadership badges.",
+    description: "Connect students with recruiters, publish success stories, and unlock stipends and leadership badges.",
   },
 ]
 
@@ -359,7 +359,7 @@ export default function AmbassadorProgramPage() {
               <span className="hidden sm:inline-block h-1 w-1 rounded-full bg-muted-foreground/40" />
               <span className="flex items-center gap-2">
                 <Award className="h-4 w-4 text-primary" />
-                Earn leadership badges & recommendation letters
+                Earn leadership badges and recommendation letters
               </span>
             </div>
 
@@ -418,7 +418,7 @@ export default function AmbassadorProgramPage() {
             </Badge>
             <h2 className="text-3xl font-bold sm:text-4xl">Every Campus Needs a Dev Weekends Ambassador</h2>
             <p className="mt-4 text-base text-muted-foreground sm:text-lg">
-              You will lead the tech heartbeat of your university with playbooks, resources, and expert backing that turn passion into measurable impact.
+              Lead the tech heartbeat of your university with playbooks, resources, and expert backing that transform passion into measurable impact.
             </p>
           </div>
 
@@ -466,8 +466,8 @@ export default function AmbassadorProgramPage() {
                 All Fellowship Advantages + Ambassador-Only Rewards
               </h3>
               <p className="mt-3 text-sm sm:text-base text-muted-foreground">
-                Step into the same benefit stack as Dev Weekends Certified Fellows, then stack exclusive ambassador goodies and
-                recognition on top.
+                Step into the benefit stack enjoyed by Dev Weekends Certified Fellows, and then layer exclusive ambassador
+                goodies and recognition on top.
               </p>
             </div>
 
@@ -490,9 +490,9 @@ export default function AmbassadorProgramPage() {
                   <Gift className="h-7 w-7" />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-xl font-semibold text-foreground">Swag & Spotlight for Top Ambassadors</h4>
+                  <h4 className="text-xl font-semibold text-foreground">Swag and Spotlight for Top Ambassadors</h4>
                   <p className="text-sm sm:text-base text-muted-foreground">
-                    Ship high-impact initiatives and unlock seasonal swag drops — hoodies, badges, desk gear, and limited pins —
+                    Deliver high-impact initiatives and unlock seasonal swag drops — hoodies, badges, desk gear, and limited pins —
                     alongside featured stories across Dev Weekends channels and official recommendation letters.
                   </p>
                 </div>
@@ -511,7 +511,7 @@ export default function AmbassadorProgramPage() {
               </Badge>
               <h2 className="text-3xl font-bold sm:text-4xl">What You&apos;ll Drive Every Quarter</h2>
               <p className="mt-4 max-w-2xl text-base text-muted-foreground sm:text-lg">
-                Focus on real outcomes that uplift students—community, skill-building, and career breakthroughs. Our OKR model keeps you aligned and energized.
+                Focus on real outcomes that uplift students — community building, skill development, and career breakthroughs. Our OKR model keeps you aligned and energized.
               </p>
 
               <div className="mt-8 space-y-6">
@@ -555,7 +555,7 @@ export default function AmbassadorProgramPage() {
                   </Badge>
                   <CardTitle className="text-2xl font-semibold">Track Momentum with Clarity</CardTitle>
                   <CardDescription className="text-base text-muted-foreground">
-                    KPIs we review together every month to celebrate wins and plan next bets.
+                    KPIs we review together every month to celebrate wins and plan what comes next.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-5">
