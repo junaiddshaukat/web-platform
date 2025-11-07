@@ -15,9 +15,13 @@ export default function Navbar() {
     { href: "/about", label: "About" },
     { href: "/mentorship", label: "Mentorship" },
     { href: "/fellowship", label: "Fellowship" },
-    { href: "/sessions", label: "Sessions" },
     { href: "/mindmaster", label: "MindMaster" },
-    { href: "/resources", label: "Resources" },
+    { href: "/ambassador-program", label: "Ambassadorship" },
+    {
+      href: "https://resources.devweekends.com",
+      label: "Resources",
+      external: true,
+    },
   ];
 
   const isActive = (path: string) => pathname === path;
@@ -34,19 +38,31 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="hidden md:flex md:items-center md:space-x-6">
-            {routes.map((route) => (
-              <Link
-                key={route.href}
-                href={route.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive(route.href)
-                    ? "text-primary"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {route.label}
-              </Link>
-            ))}
+            {routes.map((route) =>
+              route.external ? (
+                <a
+                  key={route.href}
+                  href={route.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                >
+                  {route.label}
+                </a>
+              ) : (
+                <Link
+                  key={route.href}
+                  href={route.href}
+                  className={`text-sm font-medium transition-colors hover:text-primary ${
+                    isActive(route.href)
+                      ? "text-primary"
+                      : "text-muted-foreground"
+                  }`}
+                >
+                  {route.label}
+                </Link>
+              )
+            )}
           </div>
           <div className="flex items-center space-x-4">
             <ModeToggle />
@@ -76,21 +92,42 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden py-4 transform transition-all duration-300 ease-in-out">
             <div className="flex flex-col space-y-4">
-              {routes.map((route) => (
-                <Link
-                  key={route.href}
-                  href={route.href}
-                  className={`text-sm font-medium transition-colors hover:text-primary ${
-                    isActive(route.href)
-                      ? "text-primary"
-                      : "text-muted-foreground"
-                  }`}
-                  onClick={() => setIsMenuOpen(false)}
+              {routes.map((route) =>
+                route.external ? (
+                  <a
+                    key={route.href}
+                    href={route.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {route.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={route.href}
+                    href={route.href}
+                    className={`text-sm font-medium transition-colors hover:text-primary ${
+                      isActive(route.href)
+                        ? "text-primary"
+                        : "text-muted-foreground"
+                    }`}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {route.label}
+                  </Link>
+                )
+              )}
+              <Button asChild className="w-full mt-2">
+                <a
+                  href="https://linktr.ee/DevWeekends"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  {route.label}
-                </Link>
-              ))}
-              <Button className="w-full mt-2">Join Community</Button>
+                  Join Community
+                </a>
+              </Button>
             </div>
           </div>
         )}
