@@ -6,9 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 
 const GoogleCalendar: React.FC = () => {
   const calendarSrc =
-    "https://calendar.google.com/calendar/embed?src=b05fc20c6b19f3e00c58020936a70187016673be0bf971a8f379802a53f0ce43%40group.calendar.google.com&ctz=Asia%2FKarachi"
+    "https://calendar.google.com/calendar/u/0?cid=ZGV2d2Vla2VuZHNAZ21haWwuY29t"
   const addToCalendarLink =
-    "https://calendar.google.com/calendar/u/0?cid=YjA1ZmMyMGM2YjE5ZjNlMDBjNTgwMjA5MzZhNzAxODcwMTY2NzNiZTBiZjk3MWE4ZjM3OTgwMmE1M2YwY2U0M0Bncm91cC5jYWxlbmRhci5nb29nbGUuY29t"
+    "https://calendar.google.com/calendar/u/0?cid=ZGV2d2Vla2VuZHNAZ21haWwuY29t"
 
   return (
     <Card className="w-full mt-5 max-w-4xl mx-auto">
