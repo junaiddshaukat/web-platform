@@ -1004,16 +1004,6 @@ export default function OurStoryPage() {
               </div>
             ))}
           </div>
-
-          <div className="text-center mt-10 reveal">
-            <Link
-              href="/mentors"
-              className="inline-flex items-center gap-2 text-sm font-medium hover:underline"
-            >
-              View All Mentors
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </section>
 
