@@ -336,7 +336,7 @@ export default function MindMaster() {
         <section className="py-20 md:py-28 px-6 lg:px-12 border-b border-border">
           <div className="max-w-[1100px] mx-auto">
             <div className="flex items-center gap-3 mb-10">
-              <Sparkles className="w-5 h-5" />
+              <Video className="w-5 h-5" />
               <h2 className="text-2xl font-bold tracking-tight">More Recommended Talks</h2>
             </div>
             
