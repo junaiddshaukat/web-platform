@@ -1,5 +1,6 @@
 ---
 <<<<<<< HEAD
+<<<<<<< HEAD
 name: Feature request
 about: Suggest an idea for this project
 title: ''
@@ -24,55 +25,46 @@ name: Feature Request
 about: Suggest a new feature or enhancement
 title: '[FEATURE] '
 labels: enhancement
+=======
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+>>>>>>> 0229699 (contributing guidelines)
 assignees: ''
+
 ---
 
-## Feature Description
+**Describe the bug**
+A clear and concise description of what the bug is.
 
-A clear and concise description of the feature you'd like to see.
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
-## Problem Statement
+**Expected behavior**
+A clear and concise description of what you expected to happen.
 
-Is your feature request related to a problem? Please describe.
-Example: "I'm always frustrated when..."
+**Screenshots**
+If applicable, add screenshots to help explain your problem.
 
-## Proposed Solution
+**Desktop (please complete the following information):**
+ - OS: [e.g. iOS]
+ - Browser [e.g. chrome, safari]
+ - Version [e.g. 22]
 
-Describe the solution you'd like. Be as detailed as possible.
+**Smartphone (please complete the following information):**
+ - Device: [e.g. iPhone6]
+ - OS: [e.g. iOS8.1]
+ - Browser [e.g. stock browser, safari]
+ - Version [e.g. 22]
 
-## Alternative Solutions
-
-Describe any alternative solutions or features you've considered.
-
-## Use Cases
-
-Who would benefit from this feature and how would they use it?
-
-1. **Use Case 1**: ...
-2. **Use Case 2**: ...
-
-## Mockups / Examples
-
-If applicable, add mockups, wireframes, or examples from other projects that demonstrate the feature.
-
-## Implementation Considerations
-
-If you have technical insights about implementation, share them here:
-- Potential components affected
-- Database changes needed
-- API endpoints required
-- Third-party integrations
-
-## Additional Context
-
-Add any other context, screenshots, or references about the feature request here.
-
-## Checklist
-
-- [ ] I have searched existing issues to ensure this feature hasn't been requested
-- [ ] I have provided a clear description of the feature
-- [ ] I have explained the use case and benefits
-- [ ] I am willing to help implement this feature (optional)
-
-
+<<<<<<< HEAD
 >>>>>>> 6c00998 (Add EditorConfig, update environment variables, and enhance Open Source Guidelines)
+=======
+**Additional context**
+Add any other context about the problem here.
+>>>>>>> 0229699 (contributing guidelines)
