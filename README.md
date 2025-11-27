@@ -1,136 +1,215 @@
-## Dev Weekends Web Platform
+<p align="center">
+  <img src="public/dw_black.png" alt="Dev Weekends Logo" width="200"/>
+</p>
 
-This repository contains the **Dev Weekends** web platform – the public site and internal portals (admin, mentors, ambassadors, mentees) for the Dev Weekends community.
+<h1 align="center">Dev Weekends Web Platform</h1>
 
-It is built with **Next.js 15 (App Router)**, **React 19**, **TypeScript**, **Tailwind CSS**, and **MongoDB via Mongoose**.
+<p align="center">
+  <strong>Your Gateway to Becoming a Better Software Engineer</strong>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
+  <a href="https://github.com/devweekends/web-platform/issues"><img src="https://img.shields.io/github/issues/devweekends/web-platform" alt="Issues"></a>
+  <a href="https://github.com/devweekends/web-platform/pulls"><img src="https://img.shields.io/github/issues-pr/devweekends/web-platform" alt="Pull Requests"></a>
+  <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+</p>
+
+<p align="center">
+  <a href="#-about">About</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-project-structure">Project Structure</a> •
+  <a href="#-contributing">Contributing</a> •
+  <a href="#-community">Community</a> •
+  <a href="#-license">License</a>
+</p>
 
 ---
 
-## Tech Stack
+## 📖 About
 
-- **Framework**: Next.js (App Router)
-- **Language**: TypeScript
-- **UI**: React, Tailwind CSS, Radix‑based UI components
-- **Database**: MongoDB (via Mongoose)
-- **Auth / Tokens**: Custom auth using JWT
-- **Other**: Google Analytics, Cloudinary for media, role‑based access for Admin / Mentor / Ambassador
+The **Dev Weekends Web Platform** powers the public website and internal portals for the [Dev Weekends](https://devweekends.com) community – a thriving tech community focused on mentorship in software engineering, DevOps, cloud computing, and machine learning/AI.
 
----
+This platform serves:
+- **Public visitors** – Explore sessions, mentors, resources, and community events
+- **Mentors** – Manage mentees, track progress, and share resources
+- **Ambassadors** – Coordinate community activities and outreach
+- **Admins** – Oversee the entire platform, manage users, sessions, and content
 
-## Getting Started
+## ✨ Features
 
-### 1. Prerequisites
+- 🎓 **Mentorship Program** – Connect mentors with mentees for personalized guidance
+- 📅 **Session Management** – Schedule and manage community learning sessions
+- 👥 **Community Portal** – Showcase mentors, ambassadors, and community members
+- 📚 **Resource Library** – Curated learning resources for the community
+- 🎯 **MindMaster** – Interactive challenges and learning activities
+- 🔐 **Role-Based Access** – Secure portals for Admin, Mentor, and Ambassador roles
+- 📊 **Activity Tracking** – Monitor community engagement and progress
+- 🌙 **Dark/Light Mode** – Beautiful UI with theme support
 
-- Node.js (LTS, e.g. 20+ recommended)
-- npm (or another package manager; this repo ships with `package-lock.json`)
-- Access to a MongoDB instance (local or hosted)
+## 🛠 Tech Stack
 
-### 2. Install dependencies
+| Category | Technology |
+|----------|------------|
+| **Framework** | [Next.js 15](https://nextjs.org/) (App Router) |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) |
+| **Styling** | [Tailwind CSS](https://tailwindcss.com/) |
+| **UI Components** | [Radix UI](https://www.radix-ui.com/) |
+| **Database** | [MongoDB](https://www.mongodb.com/) via [Mongoose](https://mongoosejs.com/) |
+| **Authentication** | Custom JWT-based auth |
+| **Media Storage** | [Cloudinary](https://cloudinary.com/) |
+| **Analytics** | [Google Analytics](https://analytics.google.com/) |
 
-```bash
-npm install
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Node.js** 20+ (LTS recommended)
+- **npm** (or yarn/pnpm/bun)
+- **MongoDB** instance (local or [MongoDB Atlas](https://www.mongodb.com/atlas))
+- **Git**
+
+### Installation
+
+1. **Fork the repository** (for contributors)
+
+   Click the "Fork" button at the top right of this page.
+
+2. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/web-platform.git
+   cd web-platform
+   ```
+
+3. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+4. **Configure environment variables**
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Edit `.env.local` and fill in your values. See [Environment Variables](#environment-variables) for details.
+
+5. **Start the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Open your browser**
+
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+### Environment Variables
+
+Create a `.env.local` file based on `.env.example`:
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `MONGODB_URI` | ✅ | MongoDB connection string |
+| `JWT_SECRET` | ✅ | Secret key for JWT token signing |
+| `ADMIN_ACCESS_CODE` | ✅ | Access code for admin authentication |
+| `MENTOR_ACCESS_CODE` | ✅ | Access code for mentor authentication |
+| `AMBASSADOR_ACCESS_CODE` | ✅ | Access code for ambassador authentication |
+| `NEXT_PUBLIC_GA_ID` | ❌ | Google Analytics measurement ID |
+| `CLOUDINARY_CLOUD_NAME` | ❌ | Cloudinary cloud name for media uploads |
+| `CLOUDINARY_API_KEY` | ❌ | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | ❌ | Cloudinary API secret |
+
+> ⚠️ **Security Note**: Never commit your `.env.local` file or expose secrets in your code.
+
+### Available Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Start development server with Turbopack |
+| `npm run build` | Build for production |
+| `npm start` | Start production server |
+| `npm run lint` | Run ESLint |
+
+## 📁 Project Structure
+
+```
+web-platform/
+├── app/                    # Next.js App Router
+│   ├── (public pages)/     # Public pages (home, about, sessions, etc.)
+│   ├── admin/              # Admin dashboard & management
+│   ├── ambassador/         # Ambassador portal
+│   ├── mentor/             # Mentor portal
+│   ├── api/                # API routes
+│   ├── layout.tsx          # Root layout
+│   └── globals.css         # Global styles
+├── components/             # React components
+│   ├── ui/                 # Primitive UI components (Radix-based)
+│   └── *.tsx               # Feature components
+├── lib/                    # Shared utilities
+│   ├── db.ts               # MongoDB connection
+│   ├── auth.ts             # Authentication helpers
+│   ├── jwt.ts              # JWT utilities
+│   └── utils.ts            # General utilities
+├── models/                 # Mongoose models
+├── public/                 # Static assets
+└── types/                  # TypeScript type definitions
 ```
 
-### 3. Environment variables
+## 🤝 Contributing
 
-Create a `.env.local` file in the project root.  
-Use `.env.example` as a reference – it includes all the required keys, for example:
+We love contributions! Dev Weekends is built by the community, for the community.
 
-```bash
-NEXT_PUBLIC_GA_ID=
+### Quick Start
 
-CLOUDINARY_CLOUD_NAME=
-CLOUDINARY_API_KEY=
-CLOUDINARY_API_SECRET=
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/amazing-feature`
+3. Make your changes
+4. Run linting: `npm run lint`
+5. Commit your changes: `git commit -m 'Add amazing feature'`
+6. Push to the branch: `git push origin feature/amazing-feature`
+7. Open a Pull Request
 
-JWT_SECRET=
+### Resources
 
-NODE_ENV=production
+- 📖 **[Contributing Guide](CONTRIBUTING.md)** – Detailed contribution guidelines
+- 🐛 **[Bug Report](https://github.com/devweekends/web-platform/issues/new?template=bug_report.md)** – Report a bug
+- 💡 **[Feature Request](https://github.com/devweekends/web-platform/issues/new?template=feature_request.md)** – Suggest a feature
+- 📜 **[Code of Conduct](CODE_OF_CONDUCT.md)** – Community guidelines
+- 🔒 **[Security Policy](SECURITY.md)** – Report security vulnerabilities
 
-ADMIN_ACCESS_CODE=devweekends
-MENTOR_ACCESS_CODE=devweekends
-AMBASSADOR_ACCESS_CODE=devweekends
+### Good First Issues
 
-MONGODB_URI=
-```
+Looking for a place to start? Check out issues labeled [`good first issue`](https://github.com/devweekends/web-platform/labels/good%20first%20issue) – they're perfect for newcomers!
 
-> **Note**: Do **not** commit your real `.env.local` or any secrets.
+## 👥 Community
 
-### 4. Run the development server
+Join our vibrant community of developers, mentors, and tech enthusiasts!
 
-```bash
-npm run dev
-```
+- 🌐 **Website**: [devweekends.com](https://devweekends.com)
+- 🔗 **Linktree**: [linktr.ee/DevWeekends](https://linktr.ee/DevWeekends)
+- 📺 **YouTube**: [Dev Weekends](https://www.youtube.com/@DevWeekends)
+- 💼 **LinkedIn**: [Dev Weekends](https://www.linkedin.com/company/devweekends)
+- 🐦 **Twitter**: [@devweekends](https://twitter.com/devweekends)
 
-Then open `http://localhost:3000` in your browser.
+## 🙏 Acknowledgments
 
-For a production build:
+A huge thank you to:
+- All our amazing **mentors** who volunteer their time
+- Our dedicated **ambassadors** who spread the word
+- Every **community member** who participates and contributes
+- All **open source contributors** who help improve this platform
 
-```bash
-npm run build
-npm start
-```
+## 📄 License
 
-To run linting:
-
-```bash
-npm run lint
-```
-
----
-
-## Project Structure
-
-High‑level overview of important directories:
-
-- **`app/`** – Next.js App Router structure.
-  - Public pages such as `page.tsx`, `about`, `community`, `fellowship`, `mentorship`, `resources`, `sessions`, `mindmaster`, etc.
-  - Authenticated portals under `admin`, `ambassador`, and `mentor` for dashboards, mentees, tags, tasks, sessions, and resources.
-  - API routes under `app/api/*` for auth, mentors/mentees, ambassadors, sessions, tags, resources, tasks, uploads, etc.
-  - `app/layout.tsx` sets global metadata/SEO, theme, navbar/footer, analytics, and social modal.
-- **`components/`** – Reusable React components, including:
-  - Site‑wide components like navbar, footer, analytics, MentorshipGraph, MentorsPage, TagAssignment, Google calendar integration, etc.
-  - `components/ui/` contains primitive UI components (buttons, inputs, dialogs, tabs, etc.).
-- **`lib/`** – Shared logic/utilities:
-  - `db.ts` (MongoDB connection via Mongoose with connection caching),
-  - `auth.ts`, `jwt.ts` for authentication and token helpers,
-  - Analytics helpers, resources data, and general utilities.
-- **`models/`** – Mongoose models for Admin, Mentor, Mentee, Ambassador, CoreTeamMember, ActivityLog, Session, Resource, Tag, Task, MindMaster, etc.
-- **`public/`** – Static assets (images, icons, manifest, favicons).
-- **Config** – `tsconfig.json`, `tailwind.config.ts`, `postcss.config.mjs`, `next.config.*`, etc.
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## Development Notes
-
-- The project uses **strict TypeScript** – prefer strongly‑typed code and avoid `any` when possible.
-- Use the `@/*` path alias for imports within the repo (configured in `tsconfig.json`), for example:
-
-  ```ts
-  import Navbar from "@/components/navbar"
-  import connectDB from "@/lib/db"
-  ```
-
-- Database access should use the shared `connectDB` helper from `lib/db.ts` and the centralized Mongoose models in `models/`.
-- New features should follow existing patterns in pages/components/API routes whenever possible.
-
----
-
-## Contributing
-
-Contributions are welcome from the Dev Weekends community and beyond.
-
-- Please read **`CONTRIBUTING.md`** for:
-  - Development environment setup,
-  - Coding standards and project structure,
-  - Branching / PR workflow,
-  - How to add or modify pages, components, and API routes.
-
-If you’re unsure how or where to implement a change, open an issue or discuss it with the maintainers before starting work.
-
----
-
-## License
-
-Unless otherwise specified by the maintainers, this project is proprietary to **Dev Weekends**.  
-Please contact the core team if you’d like to use or redistribute any part of this codebase.
+<p align="center">
+  Made with ❤️ by the <a href="https://devweekends.com">Dev Weekends</a> community
+</p>

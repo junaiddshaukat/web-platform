@@ -2,6 +2,15 @@
   "name": "dev-weekends",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devweekends/web-platform.git"
+  },
+  "bugs": {
+    "url": "https://github.com/devweekends/web-platform/issues"
+  },
+  "homepage": "https://github.com/devweekends/web-platform#readme",
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
