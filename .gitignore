@@ -128,3 +128,36 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# IDE and Editor files
+.idea/
+*.swp
+*.swo
+*~
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Debug logs
+debug.log
+
+# Local Netlify folder
+.netlify
+
+# Vercel
+.vercel
+
+# Turbopack
+.turbo
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.pem
+.env*.local
