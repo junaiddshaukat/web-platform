@@ -18,7 +18,7 @@ import {
   Edit,
   Eye
 } from "lucide-react";
-import "../../styles.css";
+import "../../dsoc/styles.css";
 
 interface Project {
   _id: string;

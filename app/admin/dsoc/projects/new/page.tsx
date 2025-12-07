@@ -9,7 +9,7 @@ import {
   Plus,
   Trash2
 } from "lucide-react";
-import "../../../styles.css";
+import "../../../../dsoc/styles.css";
 
 export default function NewProjectPage() {
   const router = useRouter();

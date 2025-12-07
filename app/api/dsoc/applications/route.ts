@@ -28,7 +28,6 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status');
     const menteeId = await getMenteeFromToken(request);
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const query: any = {};
     
     if (projectId) query.project = projectId;

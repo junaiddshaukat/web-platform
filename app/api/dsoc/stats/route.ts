@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams;
     const season = searchParams.get('season');
     
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const projectQuery: any = { isActive: true };
     if (season) projectQuery.season = season;
     
