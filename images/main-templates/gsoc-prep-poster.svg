@@ -50,7 +50,7 @@
     <!-- Speaker 2 -->
     <g transform="translate(310, 0)">
       <rect x="0" y="0" width="290" height="200" fill="#18181B" rx="16"/>
-      <text x="24" y="55" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="32" font-weight="800" fill="#FFFFFF">Salman</text>
+      <text x="24" y="55" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="26" font-weight="800" fill="#FFFFFF">Muhammad Salman</text>
       <rect x="24" y="75" width="60" height="3" fill="#71717A"/>
       <text x="24" y="115" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="20" font-weight="700" fill="#FAFAFA">GSoC @ Fossology</text>
       <text x="24" y="160" font-family="system-ui, -apple-system, Segoe UI, sans-serif" font-size="18" font-weight="500" fill="#A1A1AA">Mentors &amp; community</text>
