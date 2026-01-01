@@ -37,8 +37,12 @@ export default function CarrersPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [audience, setAudience] = useState<'all' | 'Students' | 'Professionals' | 'Both'>('all');
+  const [workplace, setWorkplace] = useState<'all' | 'Remote' | 'Hybrid' | 'Onsite'>('all');
+  const [employment, setEmployment] = useState<'all' | 'Internship' | 'Full-time' | 'Part-time' | 'Contract'>('all');
   const [applyOpen, setApplyOpen] = useState(false);
   const [selectedJob, setSelectedJob] = useState<JobDoc | null>(null);
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [detailsJob, setDetailsJob] = useState<JobDoc | null>(null);
 
   useEffect(() => {
     fetch('/api/jobs')
@@ -51,6 +55,8 @@ export default function CarrersPage() {
     const q = search.trim().toLowerCase();
     return jobs.filter((j) => {
       if (audience !== 'all' && (j.audience || 'Both') !== audience) return false;
+      if (workplace !== 'all' && (j.workplaceType || 'Remote') !== workplace) return false;
+      if (employment !== 'all' && (j.employmentType || 'Full-time') !== employment) return false;
       if (!q) return true;
       return (
         j.title?.toLowerCase().includes(q) ||
@@ -59,11 +65,16 @@ export default function CarrersPage() {
         (j.tags || []).join(' ').toLowerCase().includes(q)
       );
     });
-  }, [jobs, search, audience]);
+  }, [jobs, search, audience, workplace, employment]);
 
   const openApply = (job: JobDoc) => {
     setSelectedJob(job);
     setApplyOpen(true);
+  };
+
+  const openDetails = (job: JobDoc) => {
+    setDetailsJob(job);
+    setDetailsOpen(true);
   };
 
   const copyToClipboard = async (text: string) => {
@@ -79,7 +90,7 @@ export default function CarrersPage() {
       <div className="max-w-3xl">
         <h1 className="text-3xl sm:text-4xl font-bold">Careers</h1>
         <p className="text-muted-foreground mt-3">
-          Hand-picked opportunities for students and professionals from our community.
+          Hand-picked opportunities for students and professionals across Dev Weekends and Dev Weekends partner companies.
         </p>
       </div>
 
@@ -99,6 +110,29 @@ export default function CarrersPage() {
             <SelectItem value="Students">Students</SelectItem>
             <SelectItem value="Professionals">Professionals</SelectItem>
             <SelectItem value="Both">Both</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={workplace} onValueChange={(v) => setWorkplace(v as any)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Workplace" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Workplaces</SelectItem>
+            <SelectItem value="Remote">Remote</SelectItem>
+            <SelectItem value="Hybrid">Hybrid</SelectItem>
+            <SelectItem value="Onsite">Onsite</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={employment} onValueChange={(v) => setEmployment(v as any)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Employment" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Employment</SelectItem>
+            <SelectItem value="Internship">Internship</SelectItem>
+            <SelectItem value="Full-time">Full-time</SelectItem>
+            <SelectItem value="Part-time">Part-time</SelectItem>
+            <SelectItem value="Contract">Contract</SelectItem>
           </SelectContent>
         </Select>
         <div className="flex-1" />
@@ -159,9 +193,14 @@ export default function CarrersPage() {
                     ) : null}
                   </CardContent>
                   <CardFooter className="pt-0">
-                    <Button className="w-full" onClick={() => openApply(job)}>
-                      Apply
-                    </Button>
+                    <div className="w-full flex flex-col sm:flex-row gap-2">
+                      <Button className="w-full" variant="outline" onClick={() => openDetails(job)}>
+                        Read more
+                      </Button>
+                      <Button className="w-full" onClick={() => openApply(job)}>
+                        Apply
+                      </Button>
+                    </div>
                   </CardFooter>
                 </Card>
               );
@@ -169,6 +208,73 @@ export default function CarrersPage() {
           </div>
         )}
       </div>
+
+      <Dialog
+        open={detailsOpen}
+        onOpenChange={(open) => {
+          setDetailsOpen(open);
+          if (!open) setDetailsJob(null);
+        }}
+      >
+        <DialogContent className="w-[calc(100vw-1.5rem)] sm:w-full max-w-2xl max-h-[90vh] overflow-hidden p-4 sm:p-6 grid-rows-[auto,1fr]">
+          <DialogHeader>
+            <DialogTitle>Job Details</DialogTitle>
+            <DialogDescription>
+              {detailsJob ? (
+                <>
+                  {detailsJob.title} @ {detailsJob.company}
+                </>
+              ) : (
+                'Job details'
+              )}
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="min-h-0 overflow-y-auto pr-1 space-y-4">
+            <div className="text-sm text-muted-foreground space-y-1">
+              <div>
+                <span className="text-foreground font-semibold">Company:</span>{' '}
+                <span className="text-foreground">{detailsJob?.company || ''}</span>
+              </div>
+              <div>
+                <span className="text-foreground font-semibold">Location:</span>{' '}
+                <span>{detailsJob?.location || 'Not specified'}</span>
+              </div>
+              <div>
+                <span className="text-foreground font-semibold">Deadline:</span>{' '}
+                <span>
+                  {detailsJob?.deadline ? new Date(detailsJob.deadline).toLocaleDateString() : 'Not specified'}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-sm font-semibold">Description</div>
+              <div className="text-sm whitespace-pre-wrap">{detailsJob?.description || ''}</div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="text-sm font-semibold">Requirements</div>
+              <div className="text-sm whitespace-pre-wrap">
+                {detailsJob?.requirements?.trim() ? detailsJob.requirements : 'Not provided'}
+              </div>
+            </div>
+
+            {Array.isArray(detailsJob?.tags) && detailsJob!.tags!.length > 0 ? (
+              <div className="space-y-2">
+                <div className="text-sm font-semibold">Tags</div>
+                <div className="flex flex-wrap gap-1">
+                  {detailsJob!.tags!.map((t, idx) => (
+                    <Badge key={`details-${detailsJob!._id}-${idx}`} variant="outline">
+                      {t}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Dialog
         open={applyOpen}
