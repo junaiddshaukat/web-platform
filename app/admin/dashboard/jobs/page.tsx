@@ -157,7 +157,6 @@ export default function JobsAdminPage() {
     if (!formData.title.trim()) return 'Title is required';
     if (!formData.company.trim()) return 'Company is required';
     if (!formData.description.trim()) return 'Description is required';
-    if (!formData.applyUrl.trim() && !formData.applyEmail.trim()) return 'Provide apply URL or apply email';
     return '';
   };
 
@@ -242,7 +241,7 @@ export default function JobsAdminPage() {
           <DialogContent className="max-w-2xl w-[calc(100vw-1.5rem)] sm:w-full max-h-[90vh] overflow-hidden p-4 sm:p-6 grid-rows-[auto,1fr]">
             <DialogHeader>
               <DialogTitle>{editingId ? 'Edit Job' : 'Create Job'}</DialogTitle>
-              <DialogDescription>Fill in the job details. At least one apply method is required.</DialogDescription>
+              <DialogDescription>Fill in the job details. Apply URL/Email are optional.</DialogDescription>
             </DialogHeader>
 
             <form onSubmit={handleSubmit} className="flex flex-col min-h-0">

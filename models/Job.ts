@@ -26,19 +26,6 @@ const jobSchema = new Schema(
   { timestamps: true }
 );
 
-// Basic safety: don't allow jobs without any apply method
-jobSchema.pre('validate', function (next: (err?: any) => void) {
-  // @ts-expect-error - mongoose doc typing
-  const applyUrl = (this.applyUrl || '').toString().trim();
-  // @ts-expect-error - mongoose doc typing
-  const applyEmail = (this.applyEmail || '').toString().trim();
-  if (!applyUrl && !applyEmail) {
-    // @ts-expect-error - mongoose doc typing
-    this.invalidate('applyUrl', 'Either applyUrl or applyEmail is required');
-  }
-  next();
-});
-
 export const Job = models.Job || mongoose.model('Job', jobSchema);
 
 
