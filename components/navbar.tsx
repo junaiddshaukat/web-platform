@@ -16,7 +16,7 @@ export default function Navbar() {
     { href: "/about", label: "About" },
     { href: "/dsoc", label: "DSOC" },
     { href: "/mindmaster", label: "MindMaster" },
-    { href: "/carrers", label: "Careers" },
+    { href: "/careers", label: "Careers" },
     { href: "https://resources.devweekends.com", label: "Resources", external: true },
   ];
 

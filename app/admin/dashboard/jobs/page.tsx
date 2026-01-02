@@ -412,7 +412,7 @@ export default function JobsAdminPage() {
                         onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                       />
                       <Label htmlFor="isActive" className="cursor-pointer">
-                        Active (visible on /carrers)
+                        Active (visible on /careers)
                       </Label>
                     </div>
                   </div>
